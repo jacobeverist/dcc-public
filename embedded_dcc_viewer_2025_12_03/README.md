@@ -1,7 +1,14 @@
+
 # Embedded DCC Simulation Viewer
 
-Can embed this simulation viewer within an iframe on some other site.
+## Direct Link
 
+[Embedded DCC Simulation Viewer](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_2025_12_03/embed.html?demo=labeledClassification)
+
+
+## Embedded Viewer
+
+Can embed this simulation viewer within an iframe on some other site.
 
 ```html
 <div class="iframe-wrapper">
