@@ -8,6 +8,13 @@
 
 ## Embedded Viewer
 
+First the domain of this repo site needs to be whitelisted to whatever site you want to embed it on.
+
+Whitelist the following domain:
+https://jacobeverist.github.io/dcc-public/
+
+
+
 Can embed this simulation viewer within an iframe on some other site.
 
 ```html
