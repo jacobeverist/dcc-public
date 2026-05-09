@@ -29,7 +29,7 @@ var require_stdin = __commonJS({
           fetch(s.href, a);
         }
       })();
-      const Nt = "/dcc-public/encoder_analysis/assets/dcc_bundle_bg-XCii5kzL.wasm", Ft = async (e = {}, t) => {
+      const Nt = ".//assets/dcc_bundle_bg-XCii5kzL.wasm", Ft = async (e = {}, t) => {
         let n;
         if (t.startsWith("data:")) {
           const o = t.replace(/^data:.*?base64,/, "");
