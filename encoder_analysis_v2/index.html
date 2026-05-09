@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Encoder Analysis</title>
+  <script type="module" crossorigin src="/dcc-public/encoder_analysis/assets/main-CHHj4D2o.js"></script>
+  <link rel="stylesheet" crossorigin href="/dcc-public/encoder_analysis/assets/main-B4u3Pj5q.css">
+</head>
+<body>
+
+<div id="control-panels">
+
+    <!-- Encoder configuration panel (right) -->
+    <div class="controls encoder-config">
+        <span class="panel-title">Real Interval Encoder Analysis Tool</span>
+
+        <!-- Row 1: Presets + Encoder type + Periodic controls (conditional) -->
+        <div class="config-row-start">
+            <div class="control-group">
+                <label>Encoder Presets</label>
+                <select id="preset-select">
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Encoder Type</label>
+                <select id="encoder-type">
+                    <option value="fixed">Interval: Fixed Weight</option>
+                    <option value="tapering">Interval: Tapering Weight</option>
+                    <option value="periodic">Periodic: Fixed Weight</option>
+                </select>
+            </div>
+            <div class="control-group" id="periodic-controls">
+                <label>Period</label>
+                <input type="text" id="period-input" value="1.0" style="width:80px"/>
+                <label style="margin-top:4px">View bounds (lo,hi)</label>
+                <input type="text" id="bounds-input" value="-1.0,2.0" style="width:100px"/>
+                <label style="margin-top:4px">View window (lo,hi)</label>
+                <input type="text" id="x-window" value="" style="width:100px" placeholder="auto"/>
+            </div>
+            <div class="control-group" id="fixed-controls">
+                <label>View bounds (lo,hi)</label>
+                <input type="text" id="view-bounds-input" value="-1.0,2.0" style="width:100px"/>
+            </div>
+            <div class="control-group" id="weight-control">
+                <label>w (weight)</label>
+                <div class="range-row">
+                    <div class="w-slider-col">
+                        <input type="range" id="w-slider" min="1" max="6" step="1" value="1" disabled/>
+                        <div id="w-tick-row"></div>
+                    </div>
+                    <span class="range-val" id="w-val">1</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Row 2: w (weight) + Sub-encoders (n) -->
+        <div class="config-row-start">
+            <div class="control-group">
+                <div class="enc-list-row">
+                    <label>Encoders</label>
+                    <button id="enc-add">+ Add</button>
+                </div>
+                <div class="enc-list-row">
+                    <div id="encoder-list"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Row 3: Metrics -->
+        <div class="config-row-end">
+            <label class="metrics-label">Metrics</label>
+            <div class="control-group metrics" id="metrics">—</div>
+        </div>
+
+
+    </div>
+
+
+    <!-- Hidden backing stores for chip-coupled controls -->
+    <div style="display:none">
+        <select id="view-select">
+            <option value="bins-only">Bins</option>
+        </select>
+        <input type="hidden" id="ref-points" value=""/>
+        <input type="checkbox" id="show-regions"/>
+        <input type="checkbox" id="show-counts"/>
+        <input type="checkbox" id="folded-bins" checked/>
+    </div>
+
+</div>
+
+<div class="error-banner" id="error-banner"></div>
+
+<!-- Bits dashboard (current encoding at scalar cursor position) -->
+<div id="scalar-bits-panel"></div>
+
+<!-- Main area: scalar-row | plot-row (subplot panel + plot) -->
+<div id="main-area">
+
+    <!-- Scalar cursor slider — spans full width above the plot row -->
+    <div id="scalar-row">
+        <div id="scalar-val-gutter"><span id="scalar-val">0.500</span></div>
+        <div id="scalar-slider-wrap"><input type="range" id="scalar-slider" min="0" max="1" step="0.001"
+                                            value="0.5"/></div>
+        <div id="scalar-right-pad"></div>
+    </div>
+
+    <!-- Plot row: subplot panel | plot-container -->
+    <div id="center-col">
+        <!-- Left sidebar: subplot panel — all 6 types as toggle chips -->
+        <div id="subplot-panel">
+            <div class="subplot-panel-title">Plot Control</div>
+            <div id="subplot-chips"></div>
+        </div>
+
+        <!-- Single Plotly container -->
+        <div id="plot-container">
+            <div id="loading"
+                 style="display:none; position:absolute; inset:0; background:rgba(136,136,136,0.85); align-items:center; justify-content:center; font-size:1.1rem; color:#111111; z-index:10; border-radius:8px;">
+                Analyzing…
+            </div>
+            <div id="empty-plot-msg">
+                No subplots enabled — click a chip to visualize
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Ref-point popup slider -->
+<div id="ref-point-popup" style="display:none">
+    <div class="ref-point-popup-range">
+        <span id="ref-point-popup-lo"></span>
+        <span id="ref-point-popup-hi"></span>
+    </div>
+    <input type="range" id="ref-point-popup-slider"/>
+    <div class="ref-point-popup-val">
+        <span id="ref-point-popup-valtext"></span>
+    </div>
+    <div class="ref-point-popup-btns">
+        <button id="ref-point-popup-cancel">Cancel</button>
+        <button id="ref-point-popup-add">Add</button>
+    </div>
+</div>
+</body>
+</html>

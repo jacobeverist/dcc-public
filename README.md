@@ -11,7 +11,18 @@ This repository is for the purpose of hosting published assets on Discrete Corti
   - Illustrations
   - Infographics
 
+# Encoder Analysis
+
+A tool to configure encoders and interactively visualize their encodings in different ways.
+
+[Encoder Analysis Dashboard](https://jacobeverist.github.io/dcc-public/encoder_analysis_v2)
+![encoder_analysis_screenshot.png](assets/encoder_analysis_screenshot.png)
+
+
 # DCC Simulations
+
+[DCC Simulations](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2)
+![dcc_simulations_screenshot.png](assets/dcc_simulator_screenshot.png)
 
 This repository hosts interactive web-based visualizations and simulations of DCC neural network demonstrations. All viewers are built with WebAssembly for high-performance simulation and can be embedded in websites, documentation, and forums.
 

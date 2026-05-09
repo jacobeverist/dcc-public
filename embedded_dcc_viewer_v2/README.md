@@ -1,10 +1,10 @@
-
 # Embedded DCC Simulation Viewer
 
 ## Direct Link
 
 [Embedded DCC Simulation Viewer](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2/embed.html?demo=classifierComparison)
 
+![dcc_simulator_screenshot.png](../assets/dcc_simulator_screenshot.png)
 
 ## Embedded Viewer
 
