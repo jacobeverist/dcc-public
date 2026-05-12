@@ -4,76 +4,56 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Encoder Analysis</title>
-  <script type="module" crossorigin src="./assets/main-BC_lnRYU.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-B4u3Pj5q.css">
+  <script type="module" crossorigin src="./assets/main-PuOJVD_Y.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-D7QikLmt.css">
 </head>
 <body>
 
 <div id="control-panels">
 
-    <!-- Encoder configuration panel (right) -->
+    <!-- Encoder configuration panel: two-column layout.
+         Left col: presets/viewbounds group, then add-button + encoder-cards group.
+         Right col: title, then metrics (currently hidden). -->
     <div class="controls encoder-config">
-        <span class="panel-title">Real Interval Encoder Analysis Tool</span>
-
-        <!-- Row 1: Presets + Encoder type + Periodic controls (conditional) -->
-        <div class="config-row-start">
-            <div class="control-group">
-                <label>Encoder Presets</label>
-                <select id="preset-select">
-                </select>
-            </div>
-            <div class="control-group">
-                <label>Encoder Type</label>
-                <select id="encoder-type">
-                    <option value="fixed">Interval: Fixed Weight</option>
-                    <option value="tapering">Interval: Tapering Weight</option>
-                    <option value="periodic">Periodic: Fixed Weight</option>
-                </select>
-            </div>
-            <div class="control-group" id="periodic-controls">
-                <label>Period</label>
-                <input type="text" id="period-input" value="1.0" style="width:80px"/>
-                <label style="margin-top:4px">View bounds (lo,hi)</label>
-                <input type="text" id="bounds-input" value="-1.0,2.0" style="width:100px"/>
-                <label style="margin-top:4px">View window (lo,hi)</label>
-                <input type="text" id="x-window" value="" style="width:100px" placeholder="auto"/>
-            </div>
-            <div class="control-group" id="fixed-controls">
-                <label>View bounds (lo,hi)</label>
-                <input type="text" id="view-bounds-input" value="-1.0,2.0" style="width:100px"/>
-            </div>
-            <div class="control-group" id="weight-control">
-                <label>w (weight)</label>
-                <div class="range-row">
-                    <div class="w-slider-col">
-                        <input type="range" id="w-slider" min="1" max="6" step="1" value="1" disabled/>
-                        <div id="w-tick-row"></div>
+        <!-- Left column -->
+        <div class="enc-config-left">
+            <!-- Group 1: presets + view bounds -->
+            <div class="enc-group">
+                <div class="control-group">
+<!--                    <label>Encoder Presets</label>-->
+                    <label>Demo Gallery</label>
+                    <select id="preset-select">
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Plot X-Range</label>
+                    <div id="view-bounds-slider" class="dual-range">
+                        <span class="dual-range-val" id="view-bounds-lo-val">-1.0</span>
+                        <div class="dual-range-track" id="view-bounds-track">
+                            <div class="dual-range-fill" id="view-bounds-fill"></div>
+                            <input type="range" id="view-bounds-lo" min="-5" max="6" step="0.1" value="-1.0"/>
+                            <input type="range" id="view-bounds-hi" min="-5" max="6" step="0.1" value="2.0"/>
+                        </div>
+                        <span class="dual-range-val" id="view-bounds-hi-val">2.0</span>
                     </div>
-                    <span class="range-val" id="w-val">1</span>
                 </div>
             </div>
 
-        </div>
-
-        <!-- Row 2: w (weight) + Sub-encoders (n) -->
-        <div class="config-row-start">
-            <div class="control-group">
-                <div class="enc-list-row">
+            <!-- Group 2: add button + encoder cards (wrap together) -->
+            <div class="enc-group enc-cards-group">
+                <div class="control-group">
                     <label>Encoders</label>
                     <button id="enc-add">+ Add</button>
                 </div>
-                <div class="enc-list-row">
-                    <div id="encoder-list"></div>
-                </div>
+                <div id="encoder-list"></div>
             </div>
         </div>
-        <!-- Row 3: Metrics -->
-        <div class="config-row-end">
-            <label class="metrics-label">Metrics</label>
-            <div class="control-group metrics" id="metrics">—</div>
+
+        <!-- Right column: title + metrics -->
+        <div class="enc-config-right">
+            <span class="panel-title">Real Interval Encoder Analysis Tool</span>
+<!--            <div class="control-group metrics" id="metrics">&mdash;</div>-->
         </div>
-
-
     </div>
 
 
