@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Encoder Analysis · Embed Example</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #1a1a2e;
+            color: #e5e5e5;
+            min-height: 100vh;
+            padding: 14px 18px;
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        h1 { font-size: 1.1rem; font-weight: 600; }
+        p { font-size: 0.85rem; line-height: 1.45; color: #c8d4e6; max-width: 920px; }
+        p code, .hint code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.78rem;
+            background: rgba(255,255,255,0.08);
+            padding: 1px 5px; border-radius: 3px;
+        }
+        a { color: #7fb2dd; }
+        main {
+            flex: 1; min-height: 0;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 12px;
+        }
+        #preview {
+            width: 100%; height: 100%;
+            min-height: 560px;
+            border: 2px solid #000;
+            border-radius: 6px;
+            background: #888;
+            display: block;
+        }
+        aside {
+            display: flex; flex-direction: column; gap: 10px;
+            min-height: 0;
+        }
+        aside h2 {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #7fb2dd;
+            border-bottom: 1px solid #3a3f47;
+            padding-bottom: 3px;
+        }
+        pre {
+            background: #0f1626;
+            border: 1px solid #2a3a5c;
+            border-radius: 4px;
+            padding: 10px 12px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.74rem;
+            line-height: 1.5;
+            color: #e5e5e5;
+            overflow: auto;
+            white-space: pre;
+        }
+        .hint {
+            font-size: 0.78rem;
+            color: #aab3c0;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+<h1>Embed example — human-readable JSON config</h1>
+<p>
+    The config below is defined as plain, indented JSON inside a
+    <code>&lt;script type="application/json"&gt;</code> tag. The page's bootstrap
+    script reads it, encodes it once into the iframe URL hash, and mounts
+    <code>embed.html</code>. Edit the JSON block and reload — no hand-encoding
+    needed. See <a href="./playground.html">playground.html</a> for an
+    interactive flag-toggle builder, or
+    <a href="./README.md">README</a> for the full config schema.
+</p>
+
+<!--
+  ====  The embed config — edit me  =========================================
+
+  This is the live config. It is parsed by the boot script below and passed
+  to embed.html via its URL hash. Every field is optional; defaults mirror
+  the standalone app. UI flags default to `true` (region shown) — list a
+  flag and set it to `false` to hide that region.
+-->
+<script type="application/json" id="embed-config">
+{
+    "setup": {
+        "encoders": [
+            { "type": "interval-fixed", "n": 13, "w": 1, "lower_bound": 0, "upper_bound": 1 },
+            { "type": "periodic-fixed", "n": 11, "w": 2, "lower_bound": 0, "upper_bound": 1, "period": 0.5 }
+        ],
+        "viewBounds": [-1, 2],
+        "subplots":    ["bins", "similarity", "decomposition"],
+        "scalarCursor": 0.5
+    },
+    "ui": {
+        "addRemoveEncoders": false,
+        "encoderControls":   false,
+        "demoSelector":      false,
+        "viewportRange":     false
+    }
+}
+</script>
+
+<main>
+    <iframe id="preview" title="Encoder Analysis embed" loading="eager"></iframe>
+    <aside>
+        <div>
+            <h2>The config (live, read from the &lt;script&gt; tag)</h2>
+            <pre id="cfg-display"></pre>
+        </div>
+        <div class="hint">
+            <h2>How the script wires it up</h2>
+            <pre>
+const raw = document.getElementById('embed-config').textContent;
+const cfg = JSON.parse(raw);
+iframe.src = 'embed.html#' + encodeURIComponent(JSON.stringify(cfg));</pre>
+            <p style="margin-top:8px;">
+                Same-page alternative (no iframe — the embed mounts directly
+                into a <code>#app</code> div):
+            </p>
+            <pre>
+&lt;script&gt;
+  window.__ENCODER_EMBED_CONFIG__ = { setup:&hellip;, ui:&hellip; };
+&lt;/script&gt;
+&lt;div id="app"&gt;&lt;/div&gt;
+&lt;script type="module" src="/&hellip;/embed-&lt;hash&gt;.js"&gt;&lt;/script&gt;</pre>
+        </div>
+    </aside>
+</main>
+
+<script>
+    // Boot: read the JSON block → render it in the <pre> → load the iframe.
+    const raw = document.getElementById('embed-config').textContent;
+    let cfg;
+    try {
+        cfg = JSON.parse(raw);
+    } catch (e) {
+        document.getElementById('cfg-display').textContent =
+            '✗ JSON parse error: ' + (e instanceof Error ? e.message : String(e));
+        throw e;
+    }
+    document.getElementById('cfg-display').textContent = JSON.stringify(cfg, null, 2);
+    document.getElementById('preview').src =
+        './embed.html#' + encodeURIComponent(JSON.stringify(cfg));
+</script>
+</body>
+</html>

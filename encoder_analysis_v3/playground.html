@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Encoder Analysis · Embed Playground</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #1a1a2e;
+            color: #e5e5e5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            padding: 8px 14px;
+            background: #0f3460;
+            border-bottom: 2px solid #000;
+            font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
+        }
+        header small { color: #9ec5e8; font-weight: 400; font-size: 0.8rem; }
+        main {
+            flex: 1; min-height: 0;
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 0;
+        }
+        #form-col {
+            padding: 12px 14px;
+            background: #16213e;
+            border-right: 2px solid #000;
+            overflow-y: auto;
+            display: flex; flex-direction: column; gap: 14px;
+        }
+        h2 {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #7fb2dd;
+            border-bottom: 1px solid #3a3f47;
+            padding-bottom: 3px;
+            margin-bottom: 6px;
+        }
+        .row { display: flex; flex-wrap: wrap; gap: 4px; }
+        button {
+            background: #0064a3;
+            color: #fff;
+            border: 1px solid #000;
+            border-radius: 3px;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        button:hover { background: #0079c4; }
+        button.ghost { background: #2a3a5c; }
+        button.ghost:hover { background: #3a4a6c; }
+        textarea, input[type=text] {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            color: #e5e5e5;
+            border: 1px solid #3a3f47;
+            border-radius: 3px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.72rem;
+            padding: 6px 8px;
+            resize: vertical;
+        }
+        textarea { min-height: 180px; }
+        textarea:focus, input[type=text]:focus { outline: none; border-color: #4a90d9; }
+        .flag-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 12px;
+            font-size: 0.78rem;
+        }
+        .flag-list label {
+            display: flex; align-items: center; gap: 6px;
+            cursor: pointer; user-select: none;
+        }
+        .flag-list input[type=checkbox] { accent-color: #4a90d9; }
+        #url-box { font-size: 0.66rem; padding: 4px 6px; }
+        #parse-status {
+            font-size: 0.7rem;
+            min-height: 1.1em;
+        }
+        #parse-status.ok { color: #5dc46a; }
+        #parse-status.err { color: #ff7676; }
+        #preview {
+            width: 100%; height: 100%;
+            border: none;
+            background: #888;
+            display: block;
+        }
+        .actions { display: flex; gap: 6px; }
+        .actions a {
+            display: inline-flex; align-items: center;
+            background: #0064a3; color: #fff; text-decoration: none;
+            padding: 4px 8px; border-radius: 3px; font-size: 0.75rem;
+        }
+        .actions a:hover { background: #0079c4; }
+    </style>
+</head>
+<body>
+<header>
+    Encoder Analysis · Embed Playground
+    <small>Toggle flags / edit the setup; the iframe reloads with the resulting embed config.</small>
+</header>
+<main>
+    <div id="form-col">
+        <div>
+            <h2>Quick presets</h2>
+            <div class="row" id="preset-buttons">
+                <button class="ghost" data-preset="full">full</button>
+                <button class="ghost" data-preset="reader">reader</button>
+                <button class="ghost" data-preset="chartonly">chart-only</button>
+                <button class="ghost" data-preset="encoderonly">encoder-only (no chart)</button>
+                <button class="ghost" data-preset="cursoronly">cursor + chart</button>
+                <button class="ghost" data-preset="minimal">minimal seed</button>
+            </div>
+        </div>
+
+        <div>
+            <h2>Setup (JSON)</h2>
+            <textarea id="setup-json" spellcheck="false"></textarea>
+            <div id="parse-status"></div>
+        </div>
+
+        <div>
+            <h2>UI flags <span style="font-weight:400;color:#9ec5e8">— uncheck to hide</span></h2>
+            <div class="flag-list" id="flag-list"></div>
+        </div>
+
+        <div>
+            <h2>Generated URL</h2>
+            <input id="url-box" type="text" readonly/>
+            <div class="actions" style="margin-top:6px;">
+                <button id="copy-btn">Copy</button>
+                <a id="open-btn" href="#" target="_blank" rel="noopener">Open in new tab ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <iframe id="preview" title="Embed preview" loading="eager"></iframe>
+</main>
+
+<script>
+const FLAGS = [
+    'addRemoveEncoders', 'encoderCards', 'encoderControls',
+    'plotControls', 'bitPanels', 'cursorSlider',
+    'demoSelector', 'viewportRange', 'encoderPanel', 'plotPanel',
+];
+
+const SAMPLE_ENCODERS_SIMPLE = [
+    { type: 'interval-interval', n: 13, w: 1, lower_bound: 0, upper_bound: 1 },
+];
+const SAMPLE_ENCODERS_MIXED = [
+    { type: 'interval-interval', n: 13, w: 1, lower_bound: 0, upper_bound: 1 },
+    { type: 'periodic-fixed', n: 11, w: 2, lower_bound: 0, upper_bound: 1, period: 0.5 },
+];
+
+const PRESETS = {
+    full: {
+        setup: { encoders: SAMPLE_ENCODERS_MIXED, viewBounds: [-1, 2],
+                 subplots: ['bins', 'similarity', 'projected-similarity'], scalarCursor: 0.5 },
+        ui: {},
+    },
+    reader: {
+        setup: { encoders: SAMPLE_ENCODERS_MIXED, viewBounds: [-1, 2],
+                 subplots: ['bins', 'similarity', 'decomposition'], scalarCursor: 0.5 },
+        ui: { addRemoveEncoders:false, encoderControls:false,
+              demoSelector:false, viewportRange:false },
+    },
+    chartonly: {
+        setup: { encoders: SAMPLE_ENCODERS_SIMPLE, viewBounds: [-1, 2],
+                 subplots: ['bins', 'similarity'], scalarCursor: 0.5 },
+        ui: { encoderPanel:false, plotControls:false,
+              bitPanels:false, cursorSlider:false },
+    },
+    encoderonly: {
+        setup: { encoders: SAMPLE_ENCODERS_SIMPLE, viewBounds: [-1, 2],
+                 subplots: ['bins'], scalarCursor: 0.5 },
+        ui: { plotPanel:false, plotControls:false,
+              demoSelector:false, viewportRange:false },
+    },
+    cursoronly: {
+        setup: { encoders: SAMPLE_ENCODERS_SIMPLE, viewBounds: [-1, 2],
+                 subplots: ['bins'], scalarCursor: 0.5 },
+        ui: { encoderPanel:false, plotControls:false, bitPanels:false },
+    },
+    minimal: {
+        setup: { encoders: SAMPLE_ENCODERS_SIMPLE, viewBounds: [-1, 2],
+                 subplots: ['bins'], scalarCursor: 0.5 },
+        ui: {},
+    },
+};
+
+// ── Build the flag checkboxes ───────────────────────────────────────────────
+const flagListEl = document.getElementById('flag-list');
+const flagInputs = {};
+for (const f of FLAGS) {
+    const lab = document.createElement('label');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = true;
+    cb.dataset.flag = f;
+    flagInputs[f] = cb;
+    const txt = document.createElement('span');
+    txt.textContent = f;
+    lab.append(cb, txt);
+    flagListEl.appendChild(lab);
+    cb.addEventListener('change', regenerate);
+}
+
+const setupTa = document.getElementById('setup-json');
+const urlBox = document.getElementById('url-box');
+const openBtn = document.getElementById('open-btn');
+const status = document.getElementById('parse-status');
+const previewIframe = document.getElementById('preview');
+
+setupTa.addEventListener('input', regenerate);
+document.getElementById('copy-btn').addEventListener('click', () => {
+    urlBox.select();
+    navigator.clipboard?.writeText(urlBox.value);
+});
+
+// ── Preset buttons ──────────────────────────────────────────────────────────
+document.querySelectorAll('#preset-buttons button').forEach(btn => {
+    btn.addEventListener('click', () => loadPreset(btn.dataset.preset));
+});
+
+function loadPreset(name) {
+    const p = PRESETS[name];
+    if (!p) return;
+    setupTa.value = JSON.stringify(p.setup, null, 2);
+    for (const f of FLAGS) {
+        // checkbox `checked` = region visible; flag `false` = hide.
+        flagInputs[f].checked = p.ui[f] !== false;
+    }
+    regenerate();
+}
+
+// ── Regenerate URL + reload preview ─────────────────────────────────────────
+function buildUi() {
+    const ui = {};
+    for (const f of FLAGS) {
+        if (!flagInputs[f].checked) ui[f] = false;
+    }
+    return ui;
+}
+
+function regenerate() {
+    let setup;
+    try {
+        setup = setupTa.value.trim() ? JSON.parse(setupTa.value) : undefined;
+        status.textContent = setup ? '✓ JSON valid' : 'no setup — empty boot';
+        status.className = 'ok';
+    } catch (e) {
+        status.textContent = '✗ ' + (e instanceof Error ? e.message : String(e));
+        status.className = 'err';
+        return;
+    }
+    const ui = buildUi();
+    const cfg = {};
+    if (setup) cfg.setup = setup;
+    if (Object.keys(ui).length) cfg.ui = ui;
+    const hash = encodeURIComponent(JSON.stringify(cfg));
+    // Cache-bust the query so the iframe does a full navigation (changing only
+    // the hash leaves the SPA mounted with the previous config).
+    const t = Date.now().toString(36);
+    const url = `${location.origin}${location.pathname.replace(/[^/]*$/, '')}embed.html?demo=${t}#${hash}`;
+    urlBox.value = url;
+    openBtn.href = url;
+    previewIframe.src = url;
+}
+
+// Default load: the "full" preset.
+loadPreset('full');
+</script>
+</body>
+</html>

@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Encoder Analysis · Embed Builder</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #1a1a2e;
+            color: #e5e5e5;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+        header {
+            padding: 8px 14px;
+            background: #0f3460;
+            border-bottom: 2px solid #000;
+            display: flex; align-items: center; gap: 10px;
+        }
+        header h1 { font-size: 1rem; font-weight: 600; flex: 1; }
+        header small { color: #9ec5e8; font-weight: 400; font-size: 0.78rem; }
+        button {
+            background: #0064a3;
+            color: #fff;
+            border: 1px solid #000;
+            border-radius: 3px;
+            padding: 4px 10px;
+            font-size: 0.78rem;
+            cursor: pointer;
+        }
+        button:hover:not(:disabled) { background: #0079c4; }
+        button:disabled { opacity: 0.45; cursor: not-allowed; }
+        button.ghost { background: #2a3a5c; }
+        button.ghost:hover:not(:disabled) { background: #3a4a6c; }
+        button.icon { padding: 2px 7px; font-size: 0.86rem; line-height: 1; }
+
+        main {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 0;
+            flex: 0 0 auto;
+            height: 460px;
+            min-height: 360px;
+        }
+        #form-col {
+            padding: 12px 14px;
+            background: #16213e;
+            border-right: 2px solid #000;
+            overflow-y: auto;
+            display: flex; flex-direction: column; gap: 14px;
+        }
+        #json-col {
+            display: flex; flex-direction: column;
+            min-height: 0;
+        }
+        #json-view {
+            flex: 1; min-height: 0;
+            background: #0f1626;
+            padding: 10px 12px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.72rem;
+            line-height: 1.45;
+            color: #e5e5e5;
+            overflow: auto;
+            white-space: pre;
+        }
+        #json-footer {
+            background: #16213e;
+            border-top: 1px solid #000;
+            padding: 6px 10px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        #json-footer #json-status {
+            flex: 1; font-size: 0.74rem;
+        }
+        #json-footer #json-status.err { color: #ff7676; }
+        #json-footer #json-status.ok  { color: #5dc46a; }
+
+        #preview-wrap { flex: 1 1 auto; min-height: 380px; display: flex; }
+        #preview { flex: 1; width: 100%; border: none; background: #888; display: block; }
+
+        h2 {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #7fb2dd;
+            border-bottom: 1px solid #3a3f47;
+            padding-bottom: 3px;
+            margin-bottom: 6px;
+        }
+        .section { display: flex; flex-direction: column; gap: 6px; }
+
+        /* Form-row pattern */
+        label.field {
+            display: grid;
+            grid-template-columns: 110px 110px 1fr;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            min-height: 24px;
+        }
+        label.field > .name { color: #c8d4e6; }
+        label.field > .hint { color: #6a7c95; font-size: 0.7rem; }
+        label.field > .err  { color: #ff7676; font-size: 0.7rem; }
+        label.field input[type=text],
+        label.field input[type=number] {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            color: #e5e5e5;
+            border: 1px solid #3a3f47;
+            border-radius: 3px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.78rem;
+            padding: 3px 6px;
+        }
+        label.field input.err {
+            border-color: #ff7676;
+            background: rgba(255, 118, 118, 0.10);
+        }
+        label.field input:focus { outline: none; border-color: #4a90d9; }
+
+        label.bool {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.78rem;
+            color: #c8d4e6;
+            cursor: pointer; user-select: none;
+        }
+        label.bool input { accent-color: #4a90d9; }
+
+        select {
+            background: rgba(0, 0, 0, 0.4);
+            color: #e5e5e5;
+            border: 1px solid #3a3f47;
+            border-radius: 3px;
+            font-size: 0.78rem;
+            padding: 3px 6px;
+        }
+
+        /* Encoder card */
+        .enc-card {
+            background: rgba(0, 0, 0, 0.20);
+            border: 1px solid #3a3f47;
+            border-radius: 4px;
+            padding: 0;
+            display: flex; flex-direction: column;
+        }
+        .enc-card-header {
+            display: grid;
+            grid-template-columns: 24px 1fr 130px 28px;
+            gap: 6px;
+            align-items: center;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.25);
+            border-bottom: 1px solid #3a3f47;
+            border-radius: 4px 4px 0 0;
+        }
+        .enc-card[data-collapsed="true"] .enc-card-body { display: none; }
+        .enc-card[data-collapsed="true"] .enc-card-header { border-bottom: none; border-radius: 4px; }
+        .enc-card-title { font-size: 0.8rem; color: #fff; font-weight: 500; }
+        .enc-chevron {
+            background: transparent; border: none;
+            color: #fff; cursor: pointer;
+            padding: 0; font-size: 0.86rem; line-height: 1;
+        }
+        .enc-card-body {
+            padding: 6px 10px 8px 10px;
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .flag-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 12px;
+            font-size: 0.78rem;
+        }
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .subplot-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px 12px;
+            font-size: 0.78rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Encoder Analysis · Embed Builder</h1>
+    <small>Form-primary editor — JSON view on the right, live preview below.</small>
+    <button id="copy-url-btn">Copy embed URL</button>
+    <button id="reset-btn" class="ghost">Reset</button>
+</header>
+
+<main>
+    <div id="form-col"></div>
+    <div id="json-col">
+        <pre id="json-view"></pre>
+        <div id="json-footer">
+            <span id="json-status" class="ok"></span>
+            <button id="copy-json-btn" class="ghost">Copy JSON</button>
+        </div>
+    </div>
+</main>
+
+<div id="preview-wrap">
+    <iframe id="preview" title="Live embed preview" loading="eager"></iframe>
+</div>
+
+<script>
+/* ============================================================================
+ * STAY-IN-SYNC: these constants restate values declared in src/config.ts
+ * (this is a vanilla page with no module imports, matching the pattern of
+ * playground.html and embed-example.html). If you change limits/enums in
+ *   src/config.ts ENCODER_N_MIN/MAX (445), BOUNDS_STEP/VIEW_BOUNDS_x (452+),
+ *   PERIOD_x and L_FRAC_x (459+), EncoderType (220), SubplotType (139),
+ *   PRESETS (255+)
+ * or in src/embed-ui.ts EmbedUiFlags (15-37), update the matching block here.
+ * ========================================================================== */
+
+const ENCODER_TYPES = [
+    'interval-fixed', 'interval-tapering', 'periodic-fixed',
+    'periodic-cell', 'periodic-random-cell', 'interval-random-cell',
+];
+
+const SUBPLOT_TYPES = [
+    'bins', 'similarity', 'bits-by-data', 'projected-similarity',
+    'decomposition', 'similarity-heatmap', 'features',
+];
+
+const UI_FLAGS = [
+    'addRemoveEncoders', 'encoderCards', 'encoderControls',
+    'plotControls', 'bitPanels', 'cursorSlider',
+    'demoSelector', 'viewportRange', 'encoderPanel', 'plotPanel',
+];
+
+const N_MIN = 2, N_MAX = 20;
+const VB_MIN = -5, VB_MAX = 6, BOUNDS_STEP = 0.01;
+const PERIOD_MIN = 0.01, PERIOD_MAX = 11.0, PERIOD_STEP = 0.01;
+const L_FRAC_MIN = 0.01, L_FRAC_MAX = 1.0, L_FRAC_STEP = 0.01;
+
+// Per-type starter (mirrors PRESETS entries; used by "+ Add" and type-switch).
+const STARTERS = {
+    'interval-fixed':       { type:'interval-fixed',          n: 13, w: 1, lower_bound: 0, upper_bound: 1 },
+    'interval-tapering':    { type:'interval-tapering',       n: 13, w: 2, lower_bound: 0, upper_bound: 1 },
+    'periodic-fixed':       { type:'periodic-fixed',          n: 11, w: 2, lower_bound: 0, upper_bound: 1, period: 0.5 },
+    'periodic-cell':        { type:'periodic-cell',           n:  8, w: 1, lower_bound: 0, upper_bound: 1,
+                              min_period: 0.2, max_period: 0.6, l_frac: 0.4 },
+    'periodic-random-cell': { type:'periodic-random-cell',   n:  8, w: 1, lower_bound: 0, upper_bound: 1,
+                              const_origin: 0.5, const_period: 0.4, const_l_frac: 0.4,
+                              max_period: 0.6, max_l_frac: 0.8,
+                              randomize_origins: true, randomize_periods: true, randomize_l_frac: true,
+                              seed: 42 },
+    'interval-random-cell': { type:'interval-random-cell',   n:  8, w: 1, lower_bound: 0, upper_bound: 1,
+                              const_l: 0.1, max_l: 0.2, randomize_l: true, seed: 42 },
+};
+
+// Visible param schema per encoder type — drives the form body. Each entry
+// is one rendered row in the card body.
+function fieldsFor(type) {
+    const N        = { key:'n',           label:'n',           type:'int',   min:N_MIN, max:N_MAX, step:1 };
+    const W        = { key:'w',           label:'w',           type:'int',   min:1, max:10, step:1, dynMax:'wMax' };
+    const LO       = { key:'lower_bound', label:'lower_bound', type:'float', min:VB_MIN, max:VB_MAX-BOUNDS_STEP, step:BOUNDS_STEP };
+    const HI       = { key:'upper_bound', label:'upper_bound', type:'float', min:VB_MIN+BOUNDS_STEP, max:VB_MAX, step:BOUNDS_STEP };
+    const PER      = { key:'period',      label:'period',      type:'float', min:PERIOD_MIN, max:PERIOD_MAX, step:PERIOD_STEP };
+    const MIN_PER  = { key:'min_period',  label:'min_period',  type:'float', min:PERIOD_MIN, max:PERIOD_MAX, step:PERIOD_STEP };
+    const MAX_PER  = { key:'max_period',  label:'max_period',  type:'float', min:PERIOD_MIN, max:PERIOD_MAX, step:PERIOD_STEP };
+    const L_FRAC   = { key:'l_frac',      label:'l_frac (duty cycle)', type:'float', min:L_FRAC_MIN, max:L_FRAC_MAX, step:L_FRAC_STEP };
+    const C_ORIG   = { key:'const_origin',   label:'const_origin',   type:'float', min:VB_MIN, max:VB_MAX, step:BOUNDS_STEP };
+    const C_PER    = { key:'const_period',   label:'const_period',   type:'float', min:PERIOD_MIN, max:PERIOD_MAX, step:PERIOD_STEP };
+    const C_L_FRAC = { key:'const_l_frac',   label:'const_l_frac',   type:'float', min:L_FRAC_MIN, max:L_FRAC_MAX, step:L_FRAC_STEP };
+    const MAX_L_F  = { key:'max_l_frac',     label:'max_l_frac',     type:'float', min:L_FRAC_MIN, max:L_FRAC_MAX, step:L_FRAC_STEP };
+    const C_L      = { key:'const_l',        label:'const_l',        type:'float', min:BOUNDS_STEP, max:PERIOD_MAX, step:BOUNDS_STEP };
+    const MAX_L    = { key:'max_l',          label:'max_l',          type:'float', min:BOUNDS_STEP, max:PERIOD_MAX, step:BOUNDS_STEP };
+    const SEED     = { key:'seed',           label:'seed',           type:'int',   min:0, max:1_000_000_000, step:1 };
+    const R_ORIG   = { key:'randomize_origins', label:'randomize origins', type:'bool' };
+    const R_PER    = { key:'randomize_periods', label:'randomize periods', type:'bool' };
+    const R_L_FRAC = { key:'randomize_l_frac',  label:'randomize l_frac',  type:'bool' };
+    const R_L      = { key:'randomize_l',       label:'randomize l',       type:'bool' };
+
+    switch (type) {
+        case 'interval-fixed':
+        case 'interval-tapering':
+            return [N, W, LO, HI];
+        case 'periodic-fixed':
+            return [N, W, LO, HI, PER];
+        case 'periodic-cell':
+            return [N, LO, HI, MIN_PER, MAX_PER, L_FRAC];
+        case 'periodic-random-cell':
+            return [N, LO, HI, C_ORIG, R_ORIG, C_PER, MAX_PER, R_PER, C_L_FRAC, MAX_L_F, R_L_FRAC, SEED];
+        case 'interval-random-cell':
+            return [N, LO, HI, C_L, MAX_L, R_L, SEED];
+        default:
+            return [N, LO, HI];
+    }
+}
+
+/* ── State ─────────────────────────────────────────────────────────────── */
+
+const DEFAULT_STATE = {
+    setup: {
+        encoders: [structuredClone(STARTERS['interval-fixed'])],
+        viewBounds: [-1, 2],
+        subplots: ['bins', 'similarity'],
+        scalarCursor: 0.5,
+        view: 'bins-only',
+        folded: false,
+        refPoints: '',
+    },
+    ui: {},
+};
+
+let state = bootState();
+
+function bootState() {
+    if (location.hash && location.hash.length > 1) {
+        try {
+            const parsed = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+            if (parsed && typeof parsed === 'object') {
+                return mergeDefault(parsed);
+            }
+        } catch { /* fall through */ }
+    }
+    return structuredClone(DEFAULT_STATE);
+}
+
+function mergeDefault(s) {
+    const r = structuredClone(DEFAULT_STATE);
+    if (s.setup && typeof s.setup === 'object') {
+        Object.assign(r.setup, s.setup);
+        if (!Array.isArray(r.setup.encoders) || r.setup.encoders.length === 0) {
+            r.setup.encoders = [structuredClone(STARTERS['interval-fixed'])];
+        }
+    }
+    if (s.ui && typeof s.ui === 'object') r.ui = { ...s.ui };
+    return r;
+}
+
+/* ── Validation ─────────────────────────────────────────────────────────── */
+
+function validate(s) {
+    const errors = {};
+    const setup = s.setup ?? {};
+    const vb = setup.viewBounds;
+    const vbLo = Array.isArray(vb) ? vb[0] : VB_MIN;
+    const vbHi = Array.isArray(vb) ? vb[1] : VB_MAX;
+
+    if (!Array.isArray(vb) || vb.length !== 2 || !isFinite(vb[0]) || !isFinite(vb[1])) {
+        errors['viewBounds'] = 'must be [lo, hi]';
+    } else if (vbLo >= vbHi) {
+        errors['viewBounds'] = 'lo must be < hi';
+    } else if (vbLo < VB_MIN || vbHi > VB_MAX) {
+        errors['viewBounds'] = `each in [${VB_MIN}, ${VB_MAX}]`;
+    }
+
+    const cur = setup.scalarCursor;
+    if (cur != null && (!isFinite(cur))) errors['scalarCursor'] = 'must be a number';
+
+    if (setup.subplots && !Array.isArray(setup.subplots)) {
+        errors['subplots'] = 'must be an array';
+    } else if (Array.isArray(setup.subplots)) {
+        const bad = setup.subplots.filter(t => !SUBPLOT_TYPES.includes(t));
+        if (bad.length) errors['subplots'] = `unknown: ${bad.join(', ')}`;
+    }
+
+    const encs = setup.encoders ?? [];
+    if (!Array.isArray(encs) || encs.length === 0) {
+        errors['encoders'] = 'at least one required';
+    }
+    encs.forEach((enc, i) => {
+        const pre = `encoders[${i}]`;
+        if (!ENCODER_TYPES.includes(enc.type)) errors[`${pre}.type`] = 'unknown type';
+        const fields = fieldsFor(enc.type);
+        for (const f of fields) {
+            const v = enc[f.key];
+            if (f.type === 'bool') continue;
+            if (v == null || v === '' || !isFinite(v)) {
+                errors[`${pre}.${f.key}`] = 'required'; continue;
+            }
+            if (f.type === 'int' && !Number.isInteger(v)) errors[`${pre}.${f.key}`] = 'integer required';
+            let lo = f.min, hi = f.max;
+            // Dynamic bounds
+            if (f.key === 'w') hi = Math.max(1, Math.floor((enc.n ?? N_MIN) / 2));
+            if (f.key === 'period' || f.key === 'min_period' || f.key === 'max_period' || f.key === 'const_period') {
+                hi = Math.min(hi, (enc.upper_bound - enc.lower_bound) || PERIOD_MAX);
+            }
+            if (f.key === 'lower_bound') { lo = vbLo; hi = vbHi - BOUNDS_STEP; }
+            if (f.key === 'upper_bound') { lo = (enc.lower_bound ?? vbLo) + BOUNDS_STEP; hi = vbHi; }
+            if (v < lo || v > hi) errors[`${pre}.${f.key}`] = `must be in [${fmt(lo)}, ${fmt(hi)}]`;
+        }
+        // Cross-constraint: lower_bound < upper_bound
+        if (isFinite(enc.lower_bound) && isFinite(enc.upper_bound) && enc.lower_bound >= enc.upper_bound) {
+            errors[`${pre}.lower_bound`] = errors[`${pre}.lower_bound`] || 'must be < upper_bound';
+        }
+        // Cross-constraint: min_period ≤ max_period
+        if (isFinite(enc.min_period) && isFinite(enc.max_period) && enc.min_period > enc.max_period) {
+            errors[`${pre}.min_period`] = 'must be ≤ max_period';
+        }
+        // const_l ≤ max_l
+        if (isFinite(enc.const_l) && isFinite(enc.max_l) && enc.const_l > enc.max_l) {
+            errors[`${pre}.const_l`] = 'must be ≤ max_l';
+        }
+    });
+    return errors;
+}
+
+function fmt(n) { return Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100); }
+
+/* ── Emit (the JSON that becomes the embed config) ──────────────────────── */
+
+function emit(s) {
+    const out = {};
+    // setup — strip empty fields for terseness
+    const setup = {};
+    setup.encoders = s.setup.encoders.map(stripEncoder);
+    setup.viewBounds = s.setup.viewBounds;
+    if (s.setup.subplots && s.setup.subplots.length) setup.subplots = s.setup.subplots;
+    if (s.setup.scalarCursor != null) setup.scalarCursor = s.setup.scalarCursor;
+    if (s.setup.view && s.setup.view !== 'bins-only') setup.view = s.setup.view;
+    if (s.setup.folded) setup.folded = true;
+    if (s.setup.refPoints && String(s.setup.refPoints).trim()) setup.refPoints = String(s.setup.refPoints).trim();
+    out.setup = setup;
+    // ui — only emit explicit false flags
+    const ui = {};
+    for (const k of UI_FLAGS) if (s.ui[k] === false) ui[k] = false;
+    if (Object.keys(ui).length) out.ui = ui;
+    return out;
+}
+
+function stripEncoder(enc) {
+    const fields = fieldsFor(enc.type);
+    const out = { type: enc.type };
+    for (const f of fields) {
+        const v = enc[f.key];
+        if (f.type === 'bool') { if (v) out[f.key] = true; }   // emit true bools only
+        else if (v != null && v !== '') out[f.key] = v;
+    }
+    return out;
+}
+
+/* ── Render ─────────────────────────────────────────────────────────────── */
+
+const formCol  = document.getElementById('form-col');
+const jsonView = document.getElementById('json-view');
+const jsonStat = document.getElementById('json-status');
+const preview  = document.getElementById('preview');
+
+function el(tag, attrs = {}, ...children) {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+        if (k === 'class') e.className = v;
+        else if (k === 'html') e.innerHTML = v;
+        else if (k.startsWith('on') && typeof v === 'function') e.addEventListener(k.slice(2), v);
+        else if (k === 'checked') { if (v) e.checked = true; }
+        else if (v === false || v == null) { /* skip */ }
+        else e.setAttribute(k, v);
+    }
+    for (const c of children) {
+        if (c == null) continue;
+        e.append(c instanceof Node ? c : document.createTextNode(String(c)));
+    }
+    return e;
+}
+
+function renderEncoderCard(enc, idx, total, errors) {
+    const fields = fieldsFor(enc.type);
+
+    const removeBtn = el('button', {
+        class: 'icon ghost', title: 'Remove encoder',
+        disabled: total === 1,
+        onclick: () => { state.setup.encoders.splice(idx, 1); rerenderAll(); },
+    }, '×');
+
+    const collapsed = enc.__collapsed === true;
+    const chevron = el('button', {
+        class: 'enc-chevron', title: collapsed ? 'Expand' : 'Collapse',
+        onclick: () => { enc.__collapsed = !collapsed; rerenderAll(); },
+    }, collapsed ? '▸' : '▾');
+
+    const typeSelect = el('select', {
+        onchange: (e) => {
+            const nextType = e.target.value;
+            const base = structuredClone(STARTERS[nextType]);
+            // Preserve common cross-type fields where reasonable.
+            for (const k of ['n', 'lower_bound', 'upper_bound']) {
+                if (enc[k] != null) base[k] = enc[k];
+            }
+            state.setup.encoders[idx] = base;
+            rerenderAll();
+        },
+    });
+    for (const t of ENCODER_TYPES) {
+        const opt = el('option', { value: t }, t);
+        if (t === enc.type) opt.selected = true;
+        typeSelect.appendChild(opt);
+    }
+
+    const header = el('div', { class: 'enc-card-header' },
+        chevron,
+        el('span', { class: 'enc-card-title' }, `Encoder ${idx + 1}`),
+        typeSelect,
+        removeBtn,
+    );
+
+    const body = el('div', { class: 'enc-card-body' });
+    for (const f of fields) {
+        body.appendChild(renderField(f, enc, `encoders[${idx}].${f.key}`, errors, (val) => {
+            enc[f.key] = val;
+        }));
+    }
+
+    const card = el('div', { class: 'enc-card', 'data-enc-idx': idx, 'data-collapsed': collapsed ? 'true' : 'false' },
+        header, body,
+    );
+    return card;
+}
+
+function renderField(f, obj, errKey, errors, onChange) {
+    const errMsg = errors[errKey];
+    const hint = f.type === 'bool'
+        ? null
+        : (f.type === 'int' ? `(int, ${fmt(f.min)}…${fmt(f.max)})` : `(${fmt(f.min)}…${fmt(f.max)})`);
+
+    if (f.type === 'bool') {
+        const cb = el('input', {
+            type: 'checkbox', checked: obj[f.key] === true,
+            oninput: (e) => { onChange(e.target.checked); updateAfterEdit(); },
+        });
+        return el('label', { class: 'field' },
+            el('span', { class: 'name' }, f.label),
+            cb,
+            el('span', { class: 'hint' }, ''),
+        );
+    }
+
+    const input = el('input', {
+        type: 'number',
+        min: f.min, max: f.max, step: f.step,
+        value: obj[f.key] != null ? obj[f.key] : '',
+        class: errMsg ? 'err' : '',
+        oninput: (e) => {
+            const raw = e.target.value;
+            if (raw === '') { onChange(undefined); }
+            else {
+                const n = f.type === 'int' ? parseInt(raw, 10) : parseFloat(raw);
+                onChange(isFinite(n) ? n : undefined);
+            }
+            updateAfterEdit();
+        },
+    });
+    return el('label', { class: 'field' },
+        el('span', { class: 'name' }, f.label),
+        input,
+        errMsg
+            ? el('span', { class: 'err' }, errMsg)
+            : el('span', { class: 'hint' }, hint),
+    );
+}
+
+function renderSetup(errors) {
+    const sec = el('div', { class: 'section' });
+    sec.appendChild(el('h2', {}, 'Setup'));
+
+    const vb = state.setup.viewBounds;
+    const vbRow = el('div', { class: 'row-2' },
+        renderField(
+            { key: 'lo', label: 'viewBounds lo', type: 'float', min: VB_MIN, max: VB_MAX - BOUNDS_STEP, step: BOUNDS_STEP },
+            { lo: vb[0] }, 'viewBounds.lo', errors['viewBounds'] ? { 'viewBounds.lo': errors['viewBounds'] } : {},
+            (v) => { state.setup.viewBounds = [v ?? VB_MIN, state.setup.viewBounds[1]]; },
+        ),
+        renderField(
+            { key: 'hi', label: 'viewBounds hi', type: 'float', min: VB_MIN + BOUNDS_STEP, max: VB_MAX, step: BOUNDS_STEP },
+            { hi: vb[1] }, 'viewBounds.hi', errors['viewBounds'] ? { 'viewBounds.hi': errors['viewBounds'] } : {},
+            (v) => { state.setup.viewBounds = [state.setup.viewBounds[0], v ?? VB_MAX]; },
+        ),
+    );
+    sec.appendChild(vbRow);
+
+    sec.appendChild(renderField(
+        { key: 'scalarCursor', label: 'scalarCursor', type: 'float', min: VB_MIN, max: VB_MAX, step: BOUNDS_STEP },
+        state.setup, 'scalarCursor', errors,
+        (v) => { state.setup.scalarCursor = v; },
+    ));
+
+    // refPoints — free text
+    const refLabel = el('label', { class: 'field' },
+        el('span', { class: 'name' }, 'refPoints'),
+        el('input', {
+            type: 'text',
+            value: state.setup.refPoints ?? '',
+            placeholder: 'e.g. 0.2, 0.7',
+            oninput: (e) => { state.setup.refPoints = e.target.value; updateAfterEdit(); },
+        }),
+        el('span', { class: 'hint' }, '(comma list)'),
+    );
+    sec.appendChild(refLabel);
+
+    sec.appendChild(el('label', { class: 'bool' },
+        el('input', {
+            type: 'checkbox', checked: state.setup.folded === true,
+            oninput: (e) => withHarvest(() => { state.setup.folded = e.target.checked; }),
+        }),
+        'folded',
+    ));
+
+    // Subplots multi-select
+    sec.appendChild(el('h2', { style: 'margin-top:6px;' }, 'Subplots (enabled chips, in order)'));
+    const spList = el('div', { class: 'subplot-list' });
+    for (const t of SUBPLOT_TYPES) {
+        const checked = (state.setup.subplots ?? []).includes(t);
+        spList.appendChild(el('label', { class: 'bool' },
+            el('input', {
+                type: 'checkbox', checked,
+                oninput: (e) => withHarvest(() => {
+                    let arr = state.setup.subplots ? [...state.setup.subplots] : [];
+                    if (e.target.checked) { if (!arr.includes(t)) arr.push(t); }
+                    else arr = arr.filter(x => x !== t);
+                    state.setup.subplots = arr;
+                }),
+            }),
+            t,
+        ));
+    }
+    sec.appendChild(spList);
+
+    return sec;
+}
+
+function renderUiFlags() {
+    const sec = el('div', { class: 'section' });
+    sec.appendChild(el('h2', {}, 'UI flags (uncheck to hide that region)'));
+    const list = el('div', { class: 'flag-list' });
+    for (const f of UI_FLAGS) {
+        const shown = state.ui[f] !== false;       // default true
+        list.appendChild(el('label', { class: 'bool' },
+            el('input', {
+                type: 'checkbox', checked: shown,
+                oninput: (e) => withHarvest(() => {
+                    if (e.target.checked) delete state.ui[f];
+                    else state.ui[f] = false;
+                }),
+            }),
+            f,
+        ));
+    }
+    sec.appendChild(list);
+    return sec;
+}
+
+function renderEncoders(errors) {
+    const sec = el('div', { class: 'section' });
+    const head = el('div', { style: 'display:flex;align-items:center;gap:8px;' },
+        el('h2', { style: 'flex:1; margin:0;' }, 'Encoders'),
+        el('button', {
+            onclick: () => {
+                state.setup.encoders.push(structuredClone(STARTERS['interval-fixed']));
+                rerenderAll();
+            },
+        }, '+ Add encoder'),
+    );
+    sec.appendChild(head);
+    const list = el('div', { style: 'display:flex;flex-direction:column;gap:6px;' });
+    state.setup.encoders.forEach((enc, i) => {
+        list.appendChild(renderEncoderCard(enc, i, state.setup.encoders.length, errors));
+    });
+    sec.appendChild(list);
+    return sec;
+}
+
+function renderForm(errors) {
+    formCol.replaceChildren(
+        renderEncoders(errors),
+        renderSetup(errors),
+        renderUiFlags(),
+    );
+}
+
+/* ── Live-preview harvest ───────────────────────────────────────────────────
+ * The preview is itself a fully interactive embed: the user can edit encoders,
+ * move the cursor, toggle subplots, etc. The embed app mirrors its live state
+ * into its own URL hash (saveState → {setup, ui}). Before any builder action
+ * that REBUILDS the preview (toggling a UI flag / subplot / fold, or copying
+ * the config), pull that live setup back into the builder model so interactive
+ * edits aren't discarded by the rebuild — this is what lets you configure the
+ * encoder + plot state directly in the dashboard and then tweak UI flags
+ * without losing it. viewBounds is intentionally NOT harvested: the builder
+ * keeps its full-precision value (the embed serializes viewBounds at 1 dp). */
+function harvestFromPreview() {
+    let cfg;
+    try {
+        const w = preview.contentWindow;
+        const h = w && w.location ? w.location.hash : '';
+        if (!h || h.length < 2) return;
+        cfg = JSON.parse(decodeURIComponent(h.slice(1)));
+    } catch { return; }
+    const ps = cfg && cfg.setup;
+    if (!ps || typeof ps !== 'object') return;
+
+    if (Array.isArray(ps.encoders) && ps.encoders.length) {
+        const wasCollapsed = state.setup.encoders.map(e => e.__collapsed === true);
+        state.setup.encoders = ps.encoders.map((e, i) => {
+            const out = { ...e };
+            if (wasCollapsed[i]) out.__collapsed = true;
+            return out;
+        });
+    }
+    if (Array.isArray(ps.subplots)) state.setup.subplots = [...ps.subplots];
+    if (ps.scalarCursor != null && isFinite(Number(ps.scalarCursor))) {
+        state.setup.scalarCursor = Number(ps.scalarCursor);
+    }
+    if (ps.view != null) state.setup.view = ps.view;
+    if (ps.folded != null) state.setup.folded = !!ps.folded;
+    if (ps.refPoints != null) state.setup.refPoints = String(ps.refPoints);
+}
+
+/** Capture live preview edits, apply a discrete builder change, then re-render
+ *  (rebuilds form + JSON + preview from the merged state). */
+function withHarvest(applyFn) {
+    harvestFromPreview();
+    applyFn();
+    rerenderAll();
+}
+
+/* ── Update pipeline ────────────────────────────────────────────────────── */
+
+let lastValidJson = '';
+function updateJsonAndPreview() {
+    const errors = validate(state);
+    const valid = Object.keys(errors).length === 0;
+    const out = emit(state);
+    const jsonText = JSON.stringify(out, null, 2);
+    jsonView.textContent = jsonText;
+
+    if (valid) {
+        jsonStat.textContent = '✓ valid';
+        jsonStat.className = 'ok';
+        const enc = encodeURIComponent(jsonText);
+        const t = Date.now().toString(36);
+        const url = `${location.origin}${location.pathname.replace(/[^/]*$/, '')}embed.html?demo=t${t}#${enc}`;
+        preview.src = url;
+        // Persist editor state to this page's URL hash (for shareable links).
+        const stateHash = encodeURIComponent(JSON.stringify(state));
+        history.replaceState(null, '', `#${stateHash}`);
+        lastValidJson = jsonText;
+    } else {
+        const list = Object.entries(errors).map(([k, v]) => `• ${k}: ${v}`).join('  ');
+        jsonStat.textContent = `✗ ${Object.keys(errors).length} error(s) — ${list}`;
+        jsonStat.className = 'err';
+        // Leave iframe + URL hash at last valid state.
+    }
+    return errors;
+}
+
+/** Called by input handlers — touches *only* the model + JSON + iframe.
+ *  Does NOT re-render the form (preserves focus while typing). */
+function updateAfterEdit() {
+    const errors = updateJsonAndPreview();
+    // Update err class on each input by selector — cheap.
+    const inputs = formCol.querySelectorAll('label.field input[type=number],label.field input[type=text]');
+    // We don't easily know which key each input maps to without keying nodes,
+    // so we accept a small mismatch — actionable error text always lands in
+    // the JSON pane footer; per-field highlight refreshes on next rerenderAll.
+    void inputs;
+}
+
+/** Full re-render of the form DOM. Use for structural changes (add/remove
+ *  encoder, switch type) — *not* on every keystroke. */
+function rerenderAll() {
+    const errors = validate(state);
+    renderForm(errors);
+    updateJsonAndPreview();
+}
+
+/* ── Header actions ─────────────────────────────────────────────────────── */
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+    state = structuredClone(DEFAULT_STATE);
+    history.replaceState(null, '', location.pathname);
+    rerenderAll();
+});
+
+document.getElementById('copy-url-btn').addEventListener('click', () => {
+    harvestFromPreview();
+    rerenderAll();
+    navigator.clipboard?.writeText(preview.src);
+});
+
+document.getElementById('copy-json-btn').addEventListener('click', () => {
+    harvestFromPreview();
+    rerenderAll();
+    navigator.clipboard?.writeText(jsonView.textContent);
+});
+
+/* ── Boot ───────────────────────────────────────────────────────────────── */
+
+rerenderAll();
+</script>
+</body>
+</html>
