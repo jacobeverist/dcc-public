@@ -1,0 +1,9 @@
+{
+  "type": "interval-random",
+  "mode": "concrete",
+  "lower": 0,
+  "upper": 100,
+  "l": 20,
+  "x": 45,
+  "centroids": [25, 50, 75]
+}

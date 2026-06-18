@@ -1,0 +1,9 @@
+{
+  "type": "periodic-random",
+  "mode": "concrete",
+  "origin": 0,
+  "duty": 0.5,
+  "x": 14,
+  "periods": [10, 16, 24],
+  "phases": [0, 4, 6]
+}

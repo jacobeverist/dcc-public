@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Encoder Diagram Gallery</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --ink: #1a1d23;
+    --muted: #6b7280;
+    --border: #e3e6ea;
+    --accent: #2f6fed;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+  }
+  header {
+    padding: 2.5rem 1.5rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  header h1 { margin: 0 0 .4rem; font-size: 1.9rem; letter-spacing: -0.01em; }
+  header p { margin: 0; color: var(--muted); max-width: 60ch; }
+  main { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+  section { margin-top: 2.5rem; }
+  section > h2 {
+    font-size: 1.15rem;
+    margin: 0 0 1rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.25rem;
+  }
+  figure {
+    margin: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 1px 8px rgba(16,24,40,.04);
+    display: flex;
+    flex-direction: column;
+  }
+  figure .imgwrap {
+    padding: .75rem;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  figure img { width: 100%; height: auto; display: block; }
+  figure .imgwrap { cursor: zoom-in; }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(16, 20, 28, .88);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    z-index: 100;
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.5);
+  }
+  .lightbox .caption {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 1.1rem;
+    text-align: center;
+    color: #f5f6f8;
+    font-size: .95rem;
+    pointer-events: none;
+  }
+  .lightbox .close {
+    position: fixed;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 2rem;
+    line-height: 1;
+    color: #f5f6f8;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: .8;
+  }
+  .lightbox .close:hover { opacity: 1; }
+  figcaption {
+    border-top: 1px solid var(--border);
+    padding: .65rem .9rem .8rem;
+  }
+  figcaption .title { font-weight: 600; font-size: .95rem; }
+  figcaption .meta { color: var(--muted); font-size: .82rem; margin-top: .15rem; }
+  figcaption .meta code {
+    background: #f0f2f5;
+    border-radius: 4px;
+    padding: .05em .35em;
+    font-size: .9em;
+  }
+  .badge {
+    display: inline-block;
+    font-size: .68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    padding: .12em .5em;
+    border-radius: 999px;
+    vertical-align: middle;
+    margin-left: .4rem;
+  }
+  .badge.concrete { background: #e7f0ff; color: #2f6fed; }
+  .badge.symbolic { background: #fdeede; color: #b56b14; }
+  .badge.example  { background: #e6f7ee; color: #18794e; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Encoder Diagram Gallery</h1>
+  <p>Combined three-row diagrams generated from the JSON specs in this folder by <code>generate.py</code>. Each figure maps a scalar input to its sparse binary code for one encoder type. <strong>Concrete</strong> figures draw every bin; <strong>symbolic</strong> figures collapse the middle to an ellipsis.</p>
+</header>
+<main>
+
+  <section>
+    <h2>Interval encoders</h2>
+    <div class="grid">
+
+      <figure>
+        <div class="imgwrap"><img src="interval-fixed.svg" alt="interval-fixed concrete diagram"></div>
+        <figcaption>
+          <div class="title">Fixed weight<span class="badge concrete">concrete</span></div>
+          <div class="meta">Constant-width interval · code <code>11100000</code> (1, 2, 3)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="interval-fixed-symbolic.svg" alt="interval-fixed symbolic diagram"></div>
+        <figcaption>
+          <div class="title">Fixed weight<span class="badge symbolic">symbolic</span></div>
+          <div class="meta">Constant-width interval · code <code>1110000</code> (1, 2, 3)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="interval-tapering.svg" alt="interval-tapering concrete diagram"></div>
+        <figcaption>
+          <div class="title">Tapering weight<span class="badge concrete">concrete</span></div>
+          <div class="meta">Boundary-tapered interval · code <code>10000000</code> (1)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="interval-tapering-symbolic.svg" alt="interval-tapering symbolic diagram"></div>
+        <figcaption>
+          <div class="title">Tapering weight<span class="badge symbolic">symbolic</span></div>
+          <div class="meta">Boundary-tapered interval · code <code>1000000</code> (1)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="interval-random.svg" alt="interval-random concrete diagram"></div>
+        <figcaption>
+          <div class="title">Random cells<span class="badge concrete">concrete</span></div>
+          <div class="meta">Random projection · code <code>1010010</code> (1, 3, 6)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="interval-random-symbolic.svg" alt="interval-random symbolic diagram"></div>
+        <figcaption>
+          <div class="title">Random cells<span class="badge symbolic">symbolic</span></div>
+          <div class="meta">Random projection · code <code>1010010</code> (1, 3, n−1)</div>
+        </figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Periodic encoders</h2>
+    <div class="grid">
+
+      <figure>
+        <div class="imgwrap"><img src="periodic-fixed.svg" alt="periodic-fixed concrete diagram"></div>
+        <figcaption>
+          <div class="title">Fixed weight (periodic)<span class="badge concrete">concrete</span></div>
+          <div class="meta">Single-period wrapping · code <code>11000000</code> (1, 2)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="periodic-fixed-symbolic.svg" alt="periodic-fixed symbolic diagram"></div>
+        <figcaption>
+          <div class="title">Fixed weight (periodic)<span class="badge symbolic">symbolic</span></div>
+          <div class="meta">Single-period wrapping · code <code>110000</code> (1, 2)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="periodic-cell.svg" alt="periodic-cell concrete diagram"></div>
+        <figcaption>
+          <div class="title">Periodic cell<span class="badge concrete">concrete</span></div>
+          <div class="meta">Multi-scale periods · code <code>10101</code> (1, 3, 5)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="periodic-cell-symbolic.svg" alt="periodic-cell symbolic diagram"></div>
+        <figcaption>
+          <div class="title">Periodic cell<span class="badge symbolic">symbolic</span></div>
+          <div class="meta">Multi-scale periods · code <code>10101</code> (1, n−2, n)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="periodic-random.svg" alt="periodic-random concrete diagram"></div>
+        <figcaption>
+          <div class="title">Random cells (periodic)<span class="badge concrete">concrete</span></div>
+          <div class="meta">Random projection, wrapping · code <code>01110</code> (2, 3, 4)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="periodic-random-symbolic.svg" alt="periodic-random symbolic diagram"></div>
+        <figcaption>
+          <div class="title">Random cells (periodic)<span class="badge symbolic">symbolic</span></div>
+          <div class="meta">Random projection, wrapping · code <code>01110</code> (2, n−2, n−1)</div>
+        </figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Teaching examples — simplest 3-bin scalar → code</h2>
+    <div class="grid">
+
+      <figure>
+        <div class="imgwrap"><img src="interval-random-3bin-example.svg" alt="interval-random 3-bin example"></div>
+        <figcaption>
+          <div class="title">Interval random, 3 bins<span class="badge example">example</span></div>
+          <div class="meta">code <code>010</code> (2)</div>
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="imgwrap"><img src="periodic-random-3bin-example.svg" alt="periodic-random 3-bin example"></div>
+        <figcaption>
+          <div class="title">Periodic random, 3 bins<span class="badge example">example</span></div>
+          <div class="meta">code <code>101</code> (1, 3)</div>
+        </figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+</main>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lightboxClose" aria-label="Close">&times;</button>
+  <img id="lightboxImg" alt="">
+  <div class="caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+  (function () {
+    var box = document.getElementById('lightbox');
+    var boxImg = document.getElementById('lightboxImg');
+    var boxCap = document.getElementById('lightboxCaption');
+
+    function open(img) {
+      boxImg.src = img.getAttribute('src');
+      boxImg.alt = img.getAttribute('alt') || '';
+      var fig = img.closest('figure');
+      var title = fig && fig.querySelector('.title');
+      boxCap.textContent = title ? title.textContent.trim() : '';
+      box.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      box.classList.remove('open');
+      boxImg.src = '';
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('figure .imgwrap img').forEach(function (img) {
+      img.addEventListener('click', function () { open(img); });
+    });
+    box.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') close();
+    });
+  })();
+</script>
+</body>
+</html>

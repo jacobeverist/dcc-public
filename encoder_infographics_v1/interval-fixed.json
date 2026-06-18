@@ -1,0 +1,9 @@
+{
+  "type": "interval-fixed",
+  "mode": "concrete",
+  "lower": 0,
+  "upper": 60,
+  "n": 8,
+  "w": 3,
+  "x": 5
+}

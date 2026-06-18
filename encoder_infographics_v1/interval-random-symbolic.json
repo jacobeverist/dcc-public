@@ -1,0 +1,17 @@
+{
+  "type": "interval-random",
+  "mode": "symbolic",
+  "lower": 0,
+  "upper": 100,
+  "l": 16,
+  "x": 50,
+  "centroids": [
+    50,
+    20,
+    46,
+    75,
+    10,
+    54,
+    88
+  ]
+}

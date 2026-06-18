@@ -1,0 +1,14 @@
+{
+  "type": "periodic-cell",
+  "mode": "concrete",
+  "origin": 0,
+  "duty": 0.5,
+  "x": 87,
+  "periods": [
+    16,
+    24,
+    36,
+    54,
+    80
+  ]
+}

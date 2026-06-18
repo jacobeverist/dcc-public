@@ -1,0 +1,9 @@
+{
+  "type": "periodic-fixed",
+  "mode": "concrete",
+  "origin": 0,
+  "n": 8,
+  "w": 2,
+  "T": 16,
+  "x": 3
+}
