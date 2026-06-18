@@ -1,9 +1,8 @@
-import { aK as l, __tla as __tla_0 } from "./StackedSubplotPanel-De_N8OhU.js";
-import "./reactflow-DDaPvTHK.js";
-import "./elkjs-rLLxZdMu.js";
+import { h as a, __tla as __tla_0 } from "./HelpDrawer-l_qoOkyo.js";
+import "./reactflow-CFE1JzbO.js";
 import "./echarts-CxWuOr5q.js";
 import "./markdown-BhQy4Yqe.js";
-let d, m, h;
+let d, h, _;
 let __tla = Promise.all([
   (() => {
     try {
@@ -13,11 +12,11 @@ let __tla = Promise.all([
   })()
 ]).then(async () => {
   d = 600;
-  let c = l;
-  h = function(e) {
+  let c = a;
+  _ = function(e) {
     c = e;
   };
-  m = function(e) {
+  h = function(e) {
     if (!e.encoders || e.encoders.length === 0) throw new Error("At least one encoder is required");
     const [n, o] = e.viewBounds;
     if (!Number.isFinite(n) || !Number.isFinite(o) || n >= o) throw new Error("Invalid view bounds: require finite view_lo < view_hi");
@@ -29,17 +28,17 @@ let __tla = Promise.all([
         if (s > d) throw new Error(`Encoder too fine to analyze over this range: ~${Math.round(s)} periods (finest period ${r} across a range of ${t}). Increase the period or narrow the plot range so periods-in-view stays under ${d}.`);
       }
     }
-    const a = JSON.stringify({
+    const l = JSON.stringify({
       view_lo: n,
       view_hi: o,
       encoders: e.encoders
     });
-    return JSON.parse(c(a));
+    return JSON.parse(c(l));
   };
 });
 export {
   d as MAX_PERIODS_IN_VIEW,
   __tla,
-  m as runAnalysis,
-  h as setAnalyzeFn
+  h as runAnalysis,
+  _ as setAnalyzeFn
 };
