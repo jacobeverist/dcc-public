@@ -1,68 +1,52 @@
 # DCC Published Assets
 
-This repository is for the purpose of hosting published assets on Discrete Cortical Networks (DCC) research including:
+This repository hosts published assets for Discrete Cortical Networks (DCC) research:
 
-- Web-Based Apps
-  - Simulations
-  - Interactive Visualizations
-- Visuals
-  - Plots
-  - Animations
-  - Illustrations
-  - Infographics
+- **Web-Based Apps** — interactive simulations and visualizations
+- **Visuals** — plots, animations, illustrations, and infographics
 
-# Encoder Analysis
+Everything is served as static files via GitHub Pages at `https://jacobeverist.github.io/dcc-public/`. Each top-level directory is a self-contained, independently hosted app (its own HTML, JavaScript, CSS, and — where applicable — a Rust-compiled WebAssembly engine). Versions are kept side-by-side (`_v1`, `_v2`, `_v3`) so existing embed links keep working; the latest of each is the recommended entry point.
 
-A tool to configure encoders and interactively visualize their encodings in different ways.
+## Published Apps
 
-[Encoder Analysis Dashboard](https://jacobeverist.github.io/dcc-public/encoder_analysis_v2)
-![encoder_analysis_screenshot.png](assets/encoder_analysis_screenshot.png)
+### DCC Simulations
 
+Interactive simulations of DCC neural-network demos, powered by a Rust→WebAssembly engine with a React + React Flow visualization. Embeddable in websites, documentation, and forums.
 
-# DCC Simulations
-
-[DCC Simulations](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2)
 ![dcc_simulations_screenshot.png](assets/dcc_simulator_screenshot.png)
 
-This repository hosts interactive web-based visualizations and simulations of DCC neural network demonstrations. All viewers are built with WebAssembly for high-performance simulation and can be embedded in websites, documentation, and forums.
+- [DCC Studio](https://jacobeverist.github.io/dcc-public/dcc_studio_v1) — latest DCC studio app
+- [DCC Dashboard (v2)](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2) — full dashboard to load and run many demos
+- [Encoder Comparison (v2 embed)](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2/embed.html?demo=encoderComparison) — single demo, embeddable
+- [Simple Scalar Encoder (v1 embed)](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v1/embed.html?demo=simpleEncoder) — original basic encoder demo
 
-## Features
+**Features:** WebAssembly-powered simulation, interactive controls (play, pause, step, speed, learning toggle), real-time visualization of network state / time-series / bit fields, and iframe embedding.
 
-- **WebAssembly-powered**: High-performance DCC network simulation
-- **Interactive Controls**: Play, pause, step-through, speed adjustment, and learning toggles
-- **Real-time Visualization**: Network state, time-series data, and bit field representations
-- **Embeddable**: Designed for iframe embedding in documentation and forums
-- **Multiple Demos**: Various pre-configured network demonstrations
+### Encoder Visualizers
+
+Tools to configure scalar encoders and interactively inspect their encodings.
+
+![encoder_analysis_screenshot.png](assets/encoder_analysis_screenshot.png)
+
+- [Encoder Studio](https://jacobeverist.github.io/dcc-public/encoder_studio_v1) — latest studio with a configurable, embeddable layout
+- [Encoder Analysis v3](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3) — adds an [embed builder](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3/embed-builder.html) and [playground](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3/playground.html)
+- [Encoder Analysis v2](https://jacobeverist.github.io/dcc-public/encoder_analysis_v2) — previous version
+- [Encoder Analysis v1](https://jacobeverist.github.io/dcc-public/encoder_analysis_v1) — original version
+
+### Infographics
+
+- [Encoder Diagram Gallery](https://jacobeverist.github.io/dcc-public/encoder_infographics_v1) — static gallery of encoder diagrams (paired SVG + JSON spec per diagram)
 
 ## Technologies
 
-- **ReactJS**: UI framework
-- **ReactFlow**: Graph visualization library
-- **Rust**: Core DCC simulation engine
-- **WebAssembly**: Compiled from Rust to run simulation in the browser
-
-## Repository Structure
-
-- `embedded_dcc_viewer_v1/` - Version 1 viewer
-- `embedded_dcc_viewer_v2/` - Version 2 viewer with full dashboard with many demos
-
-Each viewer is self-contained with all necessary assets (HTML, JavaScript bundles, CSS, and WASM binaries).
-
-## Versions
-
-### Version 2 (Latest) - DCC Dashboard
-
-- [DCC Dashboard](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2) - Full dashboard to load and run many different demos
-
-- [Encoder Comparison (Embed)](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2/embed.html?demo=encoderComparison) - Single demo of encoder comparisons
-
-### Version 1 - DCC Dashboard
-
-- [Simple Scalar Encoder (Embed)](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v1/embed.html?demo=simpleEncoder) - Single demo of a basic encoder
+- **React** — UI framework
+- **React Flow** — graph visualization
+- **Rust + WebAssembly** — core DCC simulation engine, compiled to run in the browser
+- **Vite** — build tooling (apps here are pre-built artifacts)
 
 ## Embedding
 
-You can embed these viewers in your own websites or platforms using iframes:
+Embed any viewer with an iframe. Simulator demos are selected with a `?demo=` query parameter:
 
 ```html
 <iframe
@@ -74,10 +58,11 @@ You can embed these viewers in your own websites or platforms using iframes:
 </iframe>
 ```
 
-## Discourse Integration
+`allow="wasm-eval"` is required for WebAssembly execution. Encoder Studio supports a configurable embed layout; the easiest way to generate embed code for the encoder tools is the [Encoder Analysis v3 embed builder](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3/embed-builder.html).
+
+### Discourse Integration
 
 To embed in Discourse forums:
-1. Add `https://jacobeverist.github.io/dcc-public/` to your allowed iframes list
-2. Navigate to: Admin Settings → Site Settings → "allowed iframes"
+1. Navigate to: Admin Settings → Site Settings → "allowed iframes"
+2. Add `https://jacobeverist.github.io/dcc-public/` to the allowed iframes list
 3. Paste the iframe code into your post
-
