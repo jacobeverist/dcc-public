@@ -13,7 +13,9 @@ Everything is served as static files via GitHub Pages at `https://jacobeverist.g
 
 Interactive simulations of DCC neural-network demos, powered by a Rust→WebAssembly engine with a React + React Flow visualization. Embeddable in websites, documentation, and forums.
 
-![dcc_simulations_screenshot.png](assets/dcc_simulator_screenshot.png)
+
+<img src="assets/dcc_studio_screenshot.png" width="1600" alt="dcc studio screenshot">
+
 
 - [DCC Studio](https://jacobeverist.github.io/dcc-public/dcc_studio_v1) — latest DCC studio app
 - [DCC Dashboard (v2)](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2) — full dashboard to load and run many demos
@@ -26,7 +28,7 @@ Interactive simulations of DCC neural-network demos, powered by a Rust→WebAsse
 
 Tools to configure scalar encoders and interactively inspect their encodings.
 
-![encoder_analysis_screenshot.png](assets/encoder_analysis_screenshot.png)
+<img src="assets/encoder_studio_screenshot.png" width="1600" alt="encoder studio screenshot">
 
 - [Encoder Studio](https://jacobeverist.github.io/dcc-public/encoder_studio_v1) — latest studio with a configurable, embeddable layout
 - [Encoder Analysis v3](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3) — adds an [embed builder](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3/embed-builder.html) and [playground](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3/playground.html)
@@ -34,6 +36,8 @@ Tools to configure scalar encoders and interactively inspect their encodings.
 - [Encoder Analysis v1](https://jacobeverist.github.io/dcc-public/encoder_analysis_v1) — original version
 
 ### Infographics
+
+<img src="assets/interval-random-3bin-example.svg" width="600" alt="interval diagram">
 
 - [Encoder Diagram Gallery](https://jacobeverist.github.io/dcc-public/encoder_infographics_v1) — static gallery of encoder diagrams (paired SVG + JSON spec per diagram)
 
