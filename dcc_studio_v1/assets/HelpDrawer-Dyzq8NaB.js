@@ -1,6 +1,6 @@
-import { r as x, j as e, a as $, H as J, P as q, N as G } from "./reactflow-C_yu4jb3.js";
-import { az as d, f as ae, e as Y, L as z, g as H, j as U, aG as w, E as re, b as oe, B as _, k as M, P as D, l as A, m as ie, n as le, o as ce, ad as de, an as F, am as k, a9 as Q, aa as ue, ae as O, ai as K, al as L, aD as pe, aB as Z, aC as me, aA as he, ah as W, aH as V, aI as xe, aJ as fe, __tla as __tla_0 } from "./StackedSubplotPanel-DOZUNL8i.js";
-let Ze, Ye, $e, qe, Ge, Je, Qe;
+import { r as f, j as e, a as q, H as G, P as J, N as Y } from "./reactflow-DDaPvTHK.js";
+import { ay as d, f as re, e as Q, L as U, c as H, d as K, aG as w, E as oe, a as ie, B as _, g as M, P as O, i as L, j as le, k as ce, l as de, ab as ue, al as F, ak as C, a7 as Z, a8 as pe, ac as A, ag as W, aj as T, aC as me, aA as ee, aB as he, az as fe, af as V, aH as X, aI as xe, aJ as ge, __tla as __tla_0 } from "./StackedSubplotPanel-De_N8OhU.js";
+let st, tt, Je, Qe, Ze, et, Ye, nt;
 let __tla = Promise.all([
   (() => {
     try {
@@ -9,35 +9,35 @@ let __tla = Promise.all([
     }
   })()
 ]).then(async () => {
-  function ee() {
-    const a = x.useRef(null), [s, t] = x.useState({
+  function te() {
+    const t = f.useRef(null), [a, n] = f.useState({
       w: 0,
       h: 0
     });
-    return x.useEffect(() => {
-      const n = a.current;
-      if (!n) return;
+    return f.useEffect(() => {
+      const s = t.current;
+      if (!s) return;
       const l = new ResizeObserver((o) => {
         const u = o[0].contentRect;
-        t({
+        n({
           w: Math.round(u.width),
           h: Math.round(u.height)
         });
       });
-      return l.observe(n), () => l.disconnect();
+      return l.observe(s), () => l.disconnect();
     }, []), [
-      a,
-      s
+      t,
+      a
     ];
   }
-  const ge = x.memo(function({ index: s }) {
-    const t = d((r) => r.lastData), n = d((r) => r.scalarCursor);
-    if (!t || t.codes.length === 0) return null;
-    const l = t.sub_encoders[s];
+  const ve = f.memo(function({ index: a }) {
+    const n = d((r) => r.lastData), s = d((r) => r.scalarCursor);
+    if (!n || n.codes.length === 0) return null;
+    const l = n.sub_encoders[a];
     if (!l) return null;
-    const o = t.codes[ae(t.boundaries, n)] ?? [], [u, f] = l.bit_range, m = o.slice(u, f);
+    const o = n.codes[re(n.boundaries, s)] ?? [], [u, x] = l.bit_range, m = o.slice(u, x);
     if (m.length === 0) return null;
-    const c = Y(s);
+    const c = Q(a);
     return e.jsx("div", {
       className: "enc-mini-bits",
       children: m.map((r, i) => e.jsx("span", {
@@ -48,14 +48,14 @@ let __tla = Promise.all([
         }
       }, i))
     });
-  }), ve = {
+  }), be = {
     "interval-fixed": "Interval: Fixed Weight",
     "interval-tapering": "Interval: Tapering Weight",
     "interval-random-cell": "Interval: Random Cells",
     "periodic-fixed": "Periodic: Fixed Weight",
     "periodic-cell": "Periodic: Multi-Scale Cells",
     "periodic-random-cell": "Periodic: Random Cells"
-  }, be = [
+  }, je = [
     "interval-fixed",
     "interval-tapering",
     "interval-random-cell",
@@ -63,8 +63,8 @@ let __tla = Promise.all([
     "periodic-cell",
     "periodic-random-cell"
   ];
-  function te(a) {
-    switch (a) {
+  function ne(t) {
+    switch (t) {
       case "interval-fixed":
         return {
           w: 1
@@ -81,16 +81,16 @@ let __tla = Promise.all([
       case "periodic-cell":
         return {
           w: 1,
-          min_period: U,
+          min_period: K,
           max_period: H,
-          l_frac: z
+          l_frac: U
         };
       case "periodic-random-cell":
         return {
           w: 1,
-          min_period: U,
+          min_period: K,
           max_period: H,
-          l_frac: z,
+          l_frac: U,
           seed: 0,
           randomize_origins: true,
           randomize_periods: false,
@@ -100,33 +100,28 @@ let __tla = Promise.all([
         return {
           w: 2,
           seed: 0,
-          randomize_l: true
+          randomize_l: true,
+          const_l: 0.1,
+          max_l: 0.1
         };
       default:
         return {};
     }
   }
-  function je(a, s = 13) {
+  function ye(t, a = 13) {
     return {
-      type: a,
-      n: s,
+      type: t,
+      n: a,
       w: 1,
       lower_bound: 0,
       upper_bound: 1,
-      ...te(a)
+      ...ne(t)
     };
   }
-  const ye = {
+  const Ne = {
     "interval-fixed": true,
     "interval-tapering": true,
     "interval-random-cell": true,
-    "periodic-fixed": true,
-    "periodic-cell": false,
-    "periodic-random-cell": false
-  }, Ne = {
-    "interval-fixed": false,
-    "interval-tapering": false,
-    "interval-random-cell": false,
     "periodic-fixed": true,
     "periodic-cell": false,
     "periodic-random-cell": false
@@ -134,10 +129,17 @@ let __tla = Promise.all([
     "interval-fixed": false,
     "interval-tapering": false,
     "interval-random-cell": false,
+    "periodic-fixed": true,
+    "periodic-cell": false,
+    "periodic-random-cell": false
+  }, we = {
+    "interval-fixed": false,
+    "interval-tapering": false,
+    "interval-random-cell": false,
     "periodic-fixed": false,
     "periodic-cell": true,
     "periodic-random-cell": true
-  }, we = {
+  }, Pe = {
     "interval-fixed": false,
     "interval-tapering": false,
     "interval-random-cell": true,
@@ -145,13 +147,13 @@ let __tla = Promise.all([
     "periodic-cell": false,
     "periodic-random-cell": true
   };
-  function j({ label: a, value: s, min: t, max: n, step: l, integer: o, help: u, onChange: f }) {
+  function b({ label: t, value: a, min: n, max: s, step: l, integer: o, help: u, onChange: x }) {
     return e.jsxs("div", {
       className: "enc-field nodrag",
       children: [
         e.jsxs("label", {
           children: [
-            a,
+            t,
             u && e.jsx(w, {
               helpKey: u
             })
@@ -159,33 +161,33 @@ let __tla = Promise.all([
         }),
         e.jsx("input", {
           type: "range",
-          min: t,
-          max: n,
+          min: n,
+          max: s,
           step: l,
-          value: s,
-          onChange: (m) => f(o ? parseInt(m.target.value, 10) : parseFloat(m.target.value))
+          value: a,
+          onChange: (m) => x(o ? parseInt(m.target.value, 10) : parseFloat(m.target.value))
         }),
         e.jsx("input", {
           type: "number",
-          min: t,
-          max: n,
+          min: n,
+          max: s,
           step: l,
-          value: s,
+          value: a,
           onChange: (m) => {
             const c = o ? parseInt(m.target.value, 10) : parseFloat(m.target.value);
-            Number.isFinite(c) && f(c);
+            Number.isFinite(c) && x(c);
           }
         })
       ]
     });
   }
-  const Pe = x.memo(function({ index: s, encoder: t, onChange: n, onRemove: l, canRemove: o }) {
-    const u = Y(s), f = Math.max(1, Math.floor(t.n / 2)), m = (r) => n({
+  const Ee = f.memo(function({ index: a, encoder: n, onChange: s, onRemove: l, canRemove: o }) {
+    const u = Q(a), x = Math.max(1, Math.floor(n.n / 2)), m = (r) => s({
       type: r,
-      ...te(r)
+      ...ne(r)
     }), c = (r) => {
-      const i = Math.min(t.w ?? 1, Math.max(1, Math.floor(r / 2)));
-      n({
+      const i = Math.min(n.w ?? 1, Math.max(1, Math.floor(r / 2)));
+      s({
         n: r,
         w: i
       });
@@ -207,15 +209,15 @@ let __tla = Promise.all([
             }),
             e.jsx("select", {
               className: "enc-card-type nodrag",
-              value: t.type,
+              value: n.type,
               onChange: (r) => m(r.target.value),
-              children: be.map((r) => e.jsx("option", {
+              children: je.map((r) => e.jsx("option", {
                 value: r,
-                children: ve[r]
+                children: be[r]
               }, r))
             }),
             e.jsx(w, {
-              helpKey: `encoderType.${t.type}`
+              helpKey: `encoderType.${n.type}`
             }),
             e.jsx("button", {
               className: "enc-card-remove nodrag",
@@ -226,121 +228,121 @@ let __tla = Promise.all([
             })
           ]
         }),
-        e.jsx(j, {
+        e.jsx(b, {
           label: "n",
-          value: t.n,
-          min: oe,
-          max: re,
+          value: n.n,
+          min: ie,
+          max: oe,
           step: 1,
           integer: true,
           help: "param.n",
           onChange: c
         }),
-        ye[t.type] && e.jsx(j, {
+        Ne[n.type] && e.jsx(b, {
           label: "w",
-          value: t.w ?? 1,
+          value: n.w ?? 1,
           min: 1,
-          max: f,
+          max: x,
           step: 1,
           integer: true,
           help: "param.w",
-          onChange: (r) => n({
+          onChange: (r) => s({
             w: r
           })
         }),
-        e.jsx(j, {
+        e.jsx(b, {
           label: "lo",
-          value: t.lower_bound,
+          value: n.lower_bound,
           min: -5,
           max: 6,
           step: _,
           help: "param.offset",
-          onChange: (r) => n({
+          onChange: (r) => s({
             lower_bound: r
           })
         }),
-        e.jsx(j, {
+        e.jsx(b, {
           label: "hi",
-          value: t.upper_bound,
+          value: n.upper_bound,
           min: -5,
           max: 6,
           step: _,
           help: "param.range",
-          onChange: (r) => n({
+          onChange: (r) => s({
             upper_bound: r
           })
         }),
-        Ne[t.type] && e.jsx(j, {
+        _e[n.type] && e.jsx(b, {
           label: "period",
-          value: t.period ?? 1,
-          min: A,
-          max: D,
+          value: n.period ?? 1,
+          min: L,
+          max: O,
           step: M,
           help: "param.period",
-          onChange: (r) => n({
+          onChange: (r) => s({
             period: r
           })
         }),
-        _e[t.type] && e.jsxs(e.Fragment, {
+        we[n.type] && e.jsxs(e.Fragment, {
           children: [
-            e.jsx(j, {
+            e.jsx(b, {
               label: "minP",
-              value: t.min_period ?? 0.2,
-              min: A,
-              max: D,
+              value: n.min_period ?? 0.2,
+              min: L,
+              max: O,
               step: M,
               help: "param.min_period",
-              onChange: (r) => n({
+              onChange: (r) => s({
                 min_period: r
               })
             }),
-            e.jsx(j, {
+            e.jsx(b, {
               label: "maxP",
-              value: t.max_period ?? 0.6,
-              min: A,
-              max: D,
+              value: n.max_period ?? 0.6,
+              min: L,
+              max: O,
               step: M,
               help: "param.max_period",
-              onChange: (r) => n({
+              onChange: (r) => s({
                 max_period: r
               })
             }),
-            e.jsx(j, {
+            e.jsx(b, {
               label: "lFrac",
-              value: t.l_frac ?? 0.4,
-              min: ce,
-              max: le,
-              step: ie,
+              value: n.l_frac ?? 0.4,
+              min: de,
+              max: ce,
+              step: le,
               help: "param.l_frac",
-              onChange: (r) => n({
+              onChange: (r) => s({
                 l_frac: r
               })
             })
           ]
         }),
-        we[t.type] && e.jsxs(e.Fragment, {
+        Pe[n.type] && e.jsxs(e.Fragment, {
           children: [
-            e.jsx(j, {
+            e.jsx(b, {
               label: "seed",
-              value: t.seed ?? 0,
+              value: n.seed ?? 0,
               min: 0,
               max: 9999,
               step: 1,
               integer: true,
               help: "param.seed",
-              onChange: (r) => n({
+              onChange: (r) => s({
                 seed: r
               })
             }),
-            t.type === "periodic-random-cell" && e.jsxs(e.Fragment, {
+            n.type === "periodic-random-cell" && e.jsxs(e.Fragment, {
               children: [
                 e.jsxs("label", {
                   className: "enc-field-check nodrag",
                   children: [
                     e.jsx("input", {
                       type: "checkbox",
-                      checked: !!t.randomize_origins,
-                      onChange: (r) => n({
+                      checked: !!n.randomize_origins,
+                      onChange: (r) => s({
                         randomize_origins: r.target.checked
                       })
                     }),
@@ -352,8 +354,8 @@ let __tla = Promise.all([
                   children: [
                     e.jsx("input", {
                       type: "checkbox",
-                      checked: !!t.randomize_periods,
-                      onChange: (r) => n({
+                      checked: !!n.randomize_periods,
+                      onChange: (r) => s({
                         randomize_periods: r.target.checked
                       })
                     }),
@@ -365,8 +367,8 @@ let __tla = Promise.all([
                   children: [
                     e.jsx("input", {
                       type: "checkbox",
-                      checked: !!t.randomize_l_frac,
-                      onChange: (r) => n({
+                      checked: !!n.randomize_l_frac,
+                      onChange: (r) => s({
                         randomize_l_frac: r.target.checked
                       })
                     }),
@@ -375,28 +377,44 @@ let __tla = Promise.all([
                 })
               ]
             }),
-            t.type === "interval-random-cell" && e.jsxs("label", {
-              className: "enc-field-check nodrag",
+            n.type === "interval-random-cell" && e.jsxs(e.Fragment, {
               children: [
-                e.jsx("input", {
-                  type: "checkbox",
-                  checked: !!t.randomize_l,
-                  onChange: (r) => n({
-                    randomize_l: r.target.checked
+                e.jsx(b, {
+                  label: "l (bin size)",
+                  value: n.const_l ?? 0.1,
+                  min: 0.01,
+                  max: Math.max(0.02, n.upper_bound - n.lower_bound),
+                  step: 0.01,
+                  help: "param.l",
+                  onChange: (r) => s({
+                    const_l: r,
+                    max_l: r
                   })
                 }),
-                "randomize length"
+                e.jsxs("label", {
+                  className: "enc-field-check nodrag",
+                  children: [
+                    e.jsx("input", {
+                      type: "checkbox",
+                      checked: !!n.randomize_l,
+                      onChange: (r) => s({
+                        randomize_l: r.target.checked
+                      })
+                    }),
+                    "randomize length"
+                  ]
+                })
               ]
             })
           ]
         }),
-        e.jsx(ge, {
-          index: s
+        e.jsx(ve, {
+          index: a
         })
       ]
     });
-  }), Ee = x.memo(function() {
-    const s = d((o) => o.encoders), t = d((o) => o.addEncoder), n = d((o) => o.removeEncoder), l = d((o) => o.updateEncoder);
+  }), Se = f.memo(function() {
+    const a = d((o) => o.encoders), n = d((o) => o.addEncoder), s = d((o) => o.removeEncoder), l = d((o) => o.updateEncoder);
     return e.jsxs("div", {
       className: "enc-panel",
       style: {
@@ -412,8 +430,8 @@ let __tla = Promise.all([
           children: [
             e.jsx("button", {
               className: "enc-add-btn nodrag",
-              disabled: s.length >= de,
-              onClick: () => t(je("interval-fixed")),
+              disabled: a.length >= ue,
+              onClick: () => n(ye("interval-fixed")),
               children: "+ Add"
             }),
             e.jsx(w, {
@@ -421,32 +439,32 @@ let __tla = Promise.all([
             })
           ]
         }),
-        s.length === 0 && e.jsx("div", {
+        a.length === 0 && e.jsx("div", {
           className: "enc-empty",
           children: "Add an encoder or pick a preset."
         }),
-        s.map((o, u) => e.jsx(Pe, {
+        a.map((o, u) => e.jsx(Ee, {
           index: u,
           encoder: o,
-          onChange: (f) => l(u, f),
-          onRemove: () => n(u),
-          canRemove: s.length > 1
+          onChange: (x) => l(u, x),
+          onRemove: () => s(u),
+          canRemove: a.length > 1
         }, u))
       ]
     });
-  }), Se = F - k, B = (a) => (a - k) / Se * 100, ke = x.memo(function() {
-    const s = d((p) => p.viewBounds), t = d((p) => p.setViewBounds), [n, l] = x.useState(s[0]), [o, u] = x.useState(s[1]), [f, m] = x.useState(s[0].toFixed(1)), [c, r] = x.useState(s[1].toFixed(1));
-    x.useEffect(() => {
-      l(s[0]), u(s[1]), m(s[0].toFixed(1)), r(s[1].toFixed(1));
+  }), Ce = F - C, B = (t) => (t - C) / Ce * 100, ke = f.memo(function() {
+    const a = d((p) => p.viewBounds), n = d((p) => p.setViewBounds), [s, l] = f.useState(a[0]), [o, u] = f.useState(a[1]), [x, m] = f.useState(a[0].toFixed(1)), [c, r] = f.useState(a[1].toFixed(1));
+    f.useEffect(() => {
+      l(a[0]), u(a[1]), m(a[0].toFixed(1)), r(a[1].toFixed(1));
     }, [
-      s
+      a
     ]);
-    const i = x.useRef(null), E = x.useRef(null), N = (p) => {
+    const i = f.useRef(null), E = f.useRef(null), N = (p) => {
       E.current = p, i.current == null && (i.current = requestAnimationFrame(() => {
-        i.current = null, E.current && t(E.current);
+        i.current = null, E.current && n(E.current);
       }));
     };
-    x.useEffect(() => () => {
+    f.useEffect(() => () => {
       i.current != null && cancelAnimationFrame(i.current);
     }, []);
     const S = (p) => {
@@ -455,27 +473,27 @@ let __tla = Promise.all([
         g,
         o
       ]);
-    }, I = (p) => {
-      const g = Math.max(p, n + _);
+    }, D = (p) => {
+      const g = Math.max(p, s + _);
       u(g), r(g.toFixed(1)), N([
-        n,
+        s,
         g
       ]);
-    }, C = () => {
-      const p = parseFloat(f);
+    }, k = () => {
+      const p = parseFloat(x);
       if (Number.isFinite(p)) {
-        const g = Math.max(k, Math.min(p, o - _));
-        l(g), m(g.toFixed(1)), t([
+        const g = Math.max(C, Math.min(p, o - _));
+        l(g), m(g.toFixed(1)), n([
           g,
           o
         ]);
-      } else m(n.toFixed(1));
+      } else m(s.toFixed(1));
     }, R = () => {
       const p = parseFloat(c);
       if (Number.isFinite(p)) {
-        const g = Math.min(F, Math.max(p, n + _));
-        u(g), r(g.toFixed(1)), t([
-          n,
+        const g = Math.min(F, Math.max(p, s + _));
+        u(g), r(g.toFixed(1)), n([
+          s,
           g
         ]);
       } else r(o.toFixed(1));
@@ -504,12 +522,12 @@ let __tla = Promise.all([
                 type: "text",
                 inputMode: "decimal",
                 className: "dual-range-val",
-                value: f,
+                value: x,
                 "aria-label": "Plot x-range minimum",
                 onChange: (p) => m(p.target.value),
-                onBlur: C,
+                onBlur: k,
                 onKeyDown: (p) => {
-                  p.key === "Enter" && C();
+                  p.key === "Enter" && k();
                 }
               }),
               e.jsxs("div", {
@@ -518,27 +536,27 @@ let __tla = Promise.all([
                   e.jsx("div", {
                     className: "dual-range-fill",
                     style: {
-                      left: `${B(n)}%`,
-                      width: `${Math.max(0, B(o) - B(n))}%`
+                      left: `${B(s)}%`,
+                      width: `${Math.max(0, B(o) - B(s))}%`
                     }
                   }),
                   e.jsx("input", {
                     type: "range",
-                    min: k,
+                    min: C,
                     max: F,
                     step: _,
-                    value: n,
+                    value: s,
                     "aria-label": "Plot x-range minimum slider",
                     onChange: (p) => S(parseFloat(p.target.value))
                   }),
                   e.jsx("input", {
                     type: "range",
-                    min: k,
+                    min: C,
                     max: F,
                     step: _,
                     value: o,
                     "aria-label": "Plot x-range maximum slider",
-                    onChange: (p) => I(parseFloat(p.target.value))
+                    onChange: (p) => D(parseFloat(p.target.value))
                   })
                 ]
               }),
@@ -559,7 +577,7 @@ let __tla = Promise.all([
         })
       ]
     });
-  }), Ce = [
+  }), Re = [
     "bins",
     "per-bin",
     "similarity",
@@ -568,8 +586,8 @@ let __tla = Promise.all([
     "decomposition",
     "similarity-heatmap",
     "features"
-  ], Re = x.memo(function() {
-    const s = d((n) => n.subplots), t = d((n) => n.toggleSubplot);
+  ], Fe = f.memo(function() {
+    const a = d((s) => s.subplots), n = d((s) => s.toggleSubplot);
     return e.jsxs("div", {
       className: "enc-panel",
       style: {
@@ -586,8 +604,8 @@ let __tla = Promise.all([
             flexWrap: "wrap",
             gap: 4
           },
-          children: Ce.map((n) => {
-            const l = s.includes(n), o = ue[n];
+          children: Re.map((s) => {
+            const l = a.includes(s), o = pe[s];
             return e.jsxs("span", {
               style: {
                 display: "inline-flex",
@@ -596,7 +614,7 @@ let __tla = Promise.all([
               children: [
                 e.jsx("button", {
                   className: "nodrag",
-                  onClick: () => t(n),
+                  onClick: () => n(s),
                   style: {
                     fontSize: 11,
                     padding: "2px 6px",
@@ -607,19 +625,19 @@ let __tla = Promise.all([
                     color: "var(--text-primary)",
                     opacity: l ? 1 : 0.55
                   },
-                  children: Q[n] ?? n
+                  children: Z[s] ?? s
                 }),
                 e.jsx(w, {
-                  helpKey: `subplot.${n}`
+                  helpKey: `subplot.${s}`
                 })
               ]
-            }, n);
+            }, s);
           })
         })
       ]
     });
-  }), Fe = x.memo(function() {
-    const s = d((l) => l.applyPreset), [t, n] = x.useState(0);
+  }), Ie = f.memo(function() {
+    const a = d((l) => l.applyPreset), [n, s] = f.useState(0);
     return e.jsxs("div", {
       className: "enc-panel",
       style: {
@@ -637,56 +655,56 @@ let __tla = Promise.all([
         }),
         e.jsx("select", {
           className: "nodrag enc-select",
-          value: t,
+          value: n,
           onChange: (l) => {
             const o = parseInt(l.target.value, 10);
-            n(o), O[o] && s(O[o]);
+            s(o), A[o] && a(A[o]);
           },
           style: {
             width: "100%",
             boxSizing: "border-box"
           },
-          children: O.map((l, o) => e.jsx("option", {
+          children: A.map((l, o) => e.jsx("option", {
             value: o,
             children: l.label
           }, o))
         })
       ]
     });
-  }), Ie = x.memo(function() {
-    const s = d((h) => h.refPoints), [t, n] = d((h) => h.viewBounds), l = d((h) => h.scalarCursor), o = d((h) => h.addRefPoint), u = d((h) => h.updateRefPoint), f = d((h) => h.removeRefPoint), m = x.useRef(null), [c, r] = x.useState(null), i = (h) => K[h % K.length], E = (n - t) / 500 || 0.01, N = x.useRef(null), S = x.useRef(null), I = (h, v) => {
+  }), De = f.memo(function() {
+    const a = d((h) => h.refPoints), [n, s] = d((h) => h.viewBounds), l = d((h) => h.scalarCursor), o = d((h) => h.addRefPoint), u = d((h) => h.updateRefPoint), x = d((h) => h.removeRefPoint), m = f.useRef(null), [c, r] = f.useState(null), i = (h) => W[h % W.length], E = (s - n) / 500 || 0.01, N = f.useRef(null), S = f.useRef(null), D = (h, v) => {
       S.current = v, N.current == null && (N.current = requestAnimationFrame(() => {
         N.current = null, S.current != null && u(h, S.current);
       }));
     };
-    x.useEffect(() => () => {
+    f.useEffect(() => () => {
       N.current != null && cancelAnimationFrame(N.current);
     }, []);
-    const C = () => {
+    const k = () => {
       var _a;
-      if (s.length >= L) return;
-      const h = s.length, v = Math.min(n, Math.max(t, l));
+      if (a.length >= T) return;
+      const h = a.length, v = Math.min(s, Math.max(n, l));
       o(v);
-      const b = (_a = m.current) == null ? void 0 : _a.getBoundingClientRect();
+      const j = (_a = m.current) == null ? void 0 : _a.getBoundingClientRect();
       r({
         index: h,
         addedNew: true,
         original: v,
-        x: (b == null ? void 0 : b.left) ?? 100,
-        y: ((b == null ? void 0 : b.bottom) ?? 100) + 4
+        x: (j == null ? void 0 : j.left) ?? 100,
+        y: ((j == null ? void 0 : j.bottom) ?? 100) + 4
       });
     }, R = (h, v) => {
-      const b = v.getBoundingClientRect();
+      const j = v.getBoundingClientRect();
       r({
         index: h,
         addedNew: false,
-        original: s[h],
-        x: b.left,
-        y: b.bottom + 4
+        original: a[h],
+        x: j.left,
+        y: j.bottom + 4
       });
     }, p = () => r(null), g = () => {
-      c && (c.addedNew ? f(c.index) : u(c.index, c.original), r(null));
-    }, T = c ? s[c.index] ?? c.original : 0;
+      c && (c.addedNew ? x(c.index) : u(c.index, c.original), r(null));
+    }, z = c ? a[c.index] ?? c.original : 0;
     return e.jsxs("div", {
       className: "enc-panel",
       style: {
@@ -705,13 +723,13 @@ let __tla = Promise.all([
         e.jsxs("div", {
           className: "enc-ref-controls nodrag",
           children: [
-            s.map((h, v) => e.jsxs("span", {
+            a.map((h, v) => e.jsxs("span", {
               className: "enc-ref-chip",
               style: {
                 borderColor: i(v),
                 cursor: "pointer"
               },
-              onClick: (b) => R(v, b.currentTarget),
+              onClick: (j) => R(v, j.currentTarget),
               "data-tooltip": "Edit reference value",
               children: [
                 e.jsx("span", {
@@ -722,21 +740,21 @@ let __tla = Promise.all([
                 }),
                 h.toFixed(2),
                 e.jsx("button", {
-                  onClick: (b) => {
-                    b.stopPropagation(), f(v);
+                  onClick: (j) => {
+                    j.stopPropagation(), x(v);
                   },
                   "data-tooltip": "Remove",
                   children: "\xD7"
                 })
               ]
             }, v)),
-            s.length < L && e.jsx("button", {
+            a.length < T && e.jsx("button", {
               ref: m,
               className: "enc-add-btn",
-              onClick: C,
+              onClick: k,
               children: "+ Add Value"
             }),
-            s.length === 0 && e.jsx("span", {
+            a.length === 0 && e.jsx("span", {
               className: "enc-empty",
               style: {
                 padding: 0
@@ -745,7 +763,7 @@ let __tla = Promise.all([
             })
           ]
         }),
-        c && $.createPortal(e.jsx("div", {
+        c && q.createPortal(e.jsx("div", {
           className: "enc-ref-popup-backdrop",
           onClick: p,
           children: e.jsxs("div", {
@@ -761,18 +779,18 @@ let __tla = Promise.all([
                 children: [
                   e.jsx("input", {
                     type: "range",
-                    min: t,
-                    max: n,
+                    min: n,
+                    max: s,
                     step: E,
-                    value: Math.min(n, Math.max(t, T)),
-                    onChange: (h) => I(c.index, parseFloat(h.target.value)),
+                    value: Math.min(s, Math.max(n, z)),
+                    onChange: (h) => D(c.index, parseFloat(h.target.value)),
                     style: {
                       width: 160
                     }
                   }),
                   e.jsx("span", {
                     className: "enc-cursor-val",
-                    children: T.toFixed(3)
+                    children: z.toFixed(3)
                   })
                 ]
               }),
@@ -796,22 +814,22 @@ let __tla = Promise.all([
         }), document.body)
       ]
     });
-  }), P = e.jsx(J, {
+  }), P = e.jsx(G, {
     type: "target",
-    position: q.Left,
+    position: J.Left,
     style: {
       background: "var(--btn-primary-bg)"
     }
-  }), y = e.jsx(J, {
+  }), y = e.jsx(G, {
     type: "source",
-    position: q.Right,
+    position: J.Right,
     style: {
       background: "var(--btn-primary-bg)"
     }
-  }), ne = {
+  }), se = {
     borderColor: "transparent",
     borderWidth: 4
-  }, se = {
+  }, ae = {
     width: 14,
     height: 14,
     background: "transparent",
@@ -820,21 +838,21 @@ let __tla = Promise.all([
   function Me() {
     return e.jsxs(e.Fragment, {
       children: [
-        e.jsx(Fe, {}),
+        e.jsx(Ie, {}),
         y
       ]
     });
   }
-  function De() {
+  function Oe() {
     return e.jsxs(e.Fragment, {
       children: [
         P,
-        e.jsx(Ee, {}),
+        e.jsx(Se, {}),
         y
       ]
     });
   }
-  function Ae() {
+  function Le() {
     return e.jsxs(e.Fragment, {
       children: [
         P,
@@ -843,10 +861,10 @@ let __tla = Promise.all([
       ]
     });
   }
-  function Oe() {
+  function Ae() {
     return e.jsxs(e.Fragment, {
       children: [
-        e.jsx(he, {}),
+        e.jsx(fe, {}),
         y
       ]
     });
@@ -854,52 +872,52 @@ let __tla = Promise.all([
   function Be() {
     return e.jsxs(e.Fragment, {
       children: [
-        e.jsx(Re, {}),
-        y
-      ]
-    });
-  }
-  function Le() {
-    return e.jsxs(e.Fragment, {
-      children: [
-        e.jsx(pe, {}),
+        e.jsx(Fe, {}),
         y
       ]
     });
   }
   function Te() {
-    const a = d((i) => i.stackedOrder), s = d((i) => i.stackedActive), t = d((i) => i.lastData), n = d((i) => i.scalarCursor), l = d((i) => i.refPoints), o = d((i) => i.viewBounds), u = d((i) => i.subplotParams), f = x.useMemo(() => a.filter((i) => s.includes(i)), [
-      a,
-      s
-    ]), [m, { w: c, h: r }] = ee();
+    return e.jsxs(e.Fragment, {
+      children: [
+        e.jsx(me, {}),
+        y
+      ]
+    });
+  }
+  function ze() {
+    const t = d((i) => i.stackedOrder), a = d((i) => i.stackedActive), n = d((i) => i.lastData), s = d((i) => i.scalarCursor), l = d((i) => i.refPoints), o = d((i) => i.viewBounds), u = d((i) => i.subplotParams), x = f.useMemo(() => t.filter((i) => a.includes(i)), [
+      t,
+      a
+    ]), [m, { w: c, h: r }] = te();
     return e.jsxs("div", {
       className: "studio-subplot studio-subplot--fill",
       children: [
-        e.jsx(G, {
+        e.jsx(Y, {
           minWidth: 260,
           minHeight: 160,
-          lineStyle: ne,
-          handleStyle: se
+          lineStyle: se,
+          handleStyle: ae
         }),
         P,
         e.jsxs("div", {
           className: "studio-node-title",
           children: [
             "Stacked Chart (",
-            f.length,
+            x.length,
             ")"
           ]
         }),
         e.jsx("div", {
           ref: m,
           className: "studio-subplot-chart",
-          children: f.length === 0 ? e.jsx("div", {
+          children: x.length === 0 ? e.jsx("div", {
             className: "enc-empty",
             children: "Enable a subplot in the Stacked Subplots panel."
-          }) : c > 0 && r > 0 && e.jsx(Z, {
-            specs: f,
-            data: t,
-            cursor: n,
+          }) : c > 0 && r > 0 && e.jsx(ee, {
+            specs: x,
+            data: n,
+            cursor: s,
             refPoints: l,
             viewBounds: o,
             params: u,
@@ -911,11 +929,11 @@ let __tla = Promise.all([
       ]
     });
   }
-  function ze() {
+  function Ue() {
     return e.jsxs(e.Fragment, {
       children: [
         P,
-        e.jsx(me, {})
+        e.jsx(he, {})
       ]
     });
   }
@@ -923,23 +941,23 @@ let __tla = Promise.all([
     return e.jsxs(e.Fragment, {
       children: [
         P,
-        e.jsx(Ie, {}),
+        e.jsx(De, {}),
         y
       ]
     });
   }
-  function Ue({ data: a }) {
-    const s = a.specs ?? [
+  function Ke({ data: t }) {
+    const a = t.specs ?? [
       "bins"
-    ], t = d((i) => i.lastData), n = d((i) => i.scalarCursor), l = d((i) => i.refPoints), o = d((i) => i.viewBounds), u = d((i) => i.subplotParams), [f, { w: m, h: c }] = ee(), r = s.map((i) => Q[i] ?? i).join(" + ");
+    ], n = d((i) => i.lastData), s = d((i) => i.scalarCursor), l = d((i) => i.refPoints), o = d((i) => i.viewBounds), u = d((i) => i.subplotParams), [x, { w: m, h: c }] = te(), r = a.map((i) => Z[i] ?? i).join(" + ");
     return e.jsxs("div", {
       className: "studio-subplot studio-subplot--fill",
       children: [
-        e.jsx(G, {
+        e.jsx(Y, {
           minWidth: 240,
           minHeight: 140,
-          lineStyle: ne,
-          handleStyle: se
+          lineStyle: se,
+          handleStyle: ae
         }),
         P,
         e.jsx("div", {
@@ -947,12 +965,12 @@ let __tla = Promise.all([
           children: r
         }),
         e.jsx("div", {
-          ref: f,
+          ref: x,
           className: "studio-subplot-chart",
-          children: m > 0 && c > 0 && e.jsx(Z, {
-            specs: s,
-            data: t,
-            cursor: n,
+          children: m > 0 && c > 0 && e.jsx(ee, {
+            specs: a,
+            data: n,
+            cursor: s,
             refPoints: l,
             viewBounds: o,
             params: u,
@@ -964,20 +982,20 @@ let __tla = Promise.all([
       ]
     });
   }
-  let Ke;
-  $e = {
+  let We;
+  Je = {
     demos: Me,
-    controls: De,
-    plotrange: Ae,
-    cursor: Oe,
-    bits: ze,
+    controls: Oe,
+    plotrange: Le,
+    cursor: Ae,
+    bits: Ue,
     refpoints: He,
-    subplot: Ue,
-    stacked: Te,
-    stackedPanel: Le,
+    subplot: Ke,
+    stacked: ze,
+    stackedPanel: Te,
     picker: Be
   };
-  Ke = {
+  We = {
     demos: false,
     controls: false,
     plotrange: false,
@@ -989,57 +1007,100 @@ let __tla = Promise.all([
     stacked: true,
     subplots: false
   };
-  Je = function(a) {
+  Ye = function(t) {
     return {
-      ...Ke,
-      ...a ?? {}
+      ...We,
+      ...t ?? {}
     };
   };
-  qe = function(a) {
-    const s = {};
-    a.encoders && (s.encoders = a.encoders.map((t) => ({
-      ...t
-    }))), a.viewBounds && (s.viewBounds = [
-      ...a.viewBounds
-    ]), typeof a.scalarCursor == "number" && (s.scalarCursor = a.scalarCursor), a.refPoints && (s.refPoints = a.refPoints.slice(0, L)), a.subplots && (s.subplots = [
-      ...a.subplots
-    ]), a.subplotParams && (s.subplotParams = {
-      ...a.subplotParams
-    }), a.stacked && (s.stackedOrder = a.stacked.order ?? [
-      ...W
-    ], s.stackedActive = a.stacked.active ?? a.stacked.order ?? [
-      ...W
-    ]), d.setState(s);
+  Qe = function(t) {
+    const a = {};
+    t.encoders && (a.encoders = t.encoders.map((n) => ({
+      ...n
+    }))), t.viewBounds && (a.viewBounds = [
+      ...t.viewBounds
+    ]), typeof t.scalarCursor == "number" && (a.scalarCursor = t.scalarCursor), t.refPoints && (a.refPoints = t.refPoints.slice(0, T)), t.subplots && (a.subplots = [
+      ...t.subplots
+    ]), t.subplotParams && (a.subplotParams = {
+      ...t.subplotParams
+    }), t.stacked && (a.stackedOrder = t.stacked.order ?? [
+      ...V
+    ], a.stackedActive = t.stacked.active ?? t.stacked.order ?? [
+      ...V
+    ]), d.setState(a);
   };
-  function X(a) {
-    if (!a) return null;
+  function I(t) {
+    if (!t) return null;
     try {
-      return JSON.parse(decodeURIComponent(a));
+      return JSON.parse(decodeURIComponent(t));
     } catch {
       try {
-        return JSON.parse(a);
+        return JSON.parse(t);
       } catch {
         return null;
       }
     }
   }
-  Ge = function() {
+  Ze = function() {
     if (window.__ENCODER_STUDIO_CONFIG__) return window.__ENCODER_STUDIO_CONFIG__;
-    const a = new URLSearchParams(window.location.search).get("config");
-    return X(a) ?? X(window.location.hash ? window.location.hash.slice(1) : null);
+    const t = new URLSearchParams(window.location.search).get("config");
+    return I(t) ?? I(window.location.hash ? window.location.hash.slice(1) : null);
   };
-  function We(a) {
+  function Ve() {
+    var _a, _b;
+    const t = (_b = (_a = document.querySelector('meta[name="encoder-studio-config"]')) == null ? void 0 : _a.getAttribute("content")) == null ? void 0 : _b.trim();
+    if (!t) return null;
+    try {
+      return new URL(t, document.baseURI).href;
+    } catch {
+      return t;
+    }
+  }
+  function Xe(t) {
+    return /^(https?:\/\/|\.?\/)/.test(t) || t.toLowerCase().endsWith(".json");
+  }
+  async function $(t) {
+    try {
+      const a = await fetch(t, {
+        cache: "no-cache"
+      });
+      return a.ok ? await a.json() : null;
+    } catch {
+      return null;
+    }
+  }
+  et = async function() {
+    if (window.__ENCODER_STUDIO_CONFIG__) return window.__ENCODER_STUDIO_CONFIG__;
+    const t = new URLSearchParams(window.location.search).get("config");
+    if (t) {
+      if (Xe(t)) {
+        const l = await $(t);
+        if (l) return l;
+      }
+      const s = I(t);
+      if (s) return s;
+    }
+    const a = I(window.location.hash ? window.location.hash.slice(1) : null);
+    if (a) return a;
+    const n = Ve();
+    if (n) {
+      const s = await $(n);
+      if (s) return s;
+    }
+    return {};
+  };
+  function $e(t) {
     var _a, _b, _c, _d;
-    const s = typeof ((_a = a.style) == null ? void 0 : _a.width) == "number" ? a.style.width : void 0, t = typeof ((_b = a.style) == null ? void 0 : _b.height) == "number" ? a.style.height : void 0;
+    const a = typeof ((_a = t.style) == null ? void 0 : _a.width) == "number" ? t.style.width : void 0, n = typeof ((_b = t.style) == null ? void 0 : _b.height) == "number" ? t.style.height : void 0;
     return {
-      w: ((_c = a.measured) == null ? void 0 : _c.width) ?? s,
-      h: ((_d = a.measured) == null ? void 0 : _d.height) ?? t
+      w: ((_c = t.measured) == null ? void 0 : _c.width) ?? a,
+      h: ((_d = t.measured) == null ? void 0 : _d.height) ?? n
     };
   }
-  Ye = function(a, s) {
-    const t = d.getState(), n = a.map((o) => {
+  tt = function(t, a) {
+    const n = d.getState(), s = t.map((o) => {
       var _a;
-      const u = o.type ?? "subplot", f = {
+      const u = o.type ?? "subplot", x = {
         id: o.id,
         type: u,
         position: {
@@ -1048,79 +1109,79 @@ let __tla = Promise.all([
         }
       };
       if (u === "subplot" || u === "stacked") {
-        const { w: c, h: r } = We(o);
-        c && (f.width = Math.round(c)), r && (f.height = Math.round(r));
+        const { w: c, h: r } = $e(o);
+        c && (x.width = Math.round(c)), r && (x.height = Math.round(r));
       }
       const m = (_a = o.data) == null ? void 0 : _a.specs;
-      return m && (f.specs = m), f;
-    }), l = s.map((o) => ({
+      return m && (x.specs = m), x;
+    }), l = a.map((o) => ({
       id: o.id,
       source: o.source,
       target: o.target,
       animated: !!o.animated
     }));
     return {
-      encoders: t.encoders.map((o) => ({
+      encoders: n.encoders.map((o) => ({
         ...o
       })),
       viewBounds: [
-        ...t.viewBounds
+        ...n.viewBounds
       ],
-      scalarCursor: t.scalarCursor,
+      scalarCursor: n.scalarCursor,
       refPoints: [
-        ...t.refPoints
+        ...n.refPoints
       ],
       stacked: {
         order: [
-          ...t.stackedOrder
+          ...n.stackedOrder
         ],
         active: [
-          ...t.stackedActive
+          ...n.stackedActive
         ]
       },
       subplotParams: {
-        ...t.subplotParams
+        ...n.subplotParams
       },
-      nodes: n,
+      nodes: s,
       edges: l,
       interactive: false,
       background: false
     };
   };
-  Qe = function(a) {
-    const s = encodeURIComponent(JSON.stringify(a));
-    return `${window.location.origin}/encoder-studio-embed.html#${s}`;
+  nt = function(t) {
+    const a = encodeURIComponent(JSON.stringify(t));
+    return `${window.location.origin}/encoder-studio-embed.html#${a}`;
   };
-  Ze = function() {
-    const a = V((n) => n.helpKey), s = V((n) => n.close);
-    if (x.useEffect(() => {
-      if (!a) return;
-      const n = (l) => {
-        l.key === "Escape" && s();
+  st = function() {
+    const t = X((s) => s.helpKey), a = X((s) => s.close);
+    if (f.useEffect(() => {
+      if (!t) return;
+      const s = (l) => {
+        l.key === "Escape" && a();
       };
-      return window.addEventListener("keydown", n), () => window.removeEventListener("keydown", n);
+      return window.addEventListener("keydown", s), () => window.removeEventListener("keydown", s);
     }, [
-      a,
-      s
-    ]), !a) return null;
-    const t = xe[a];
-    return t ? $.createPortal(e.jsx("div", {
+      t,
+      a
+    ]), !t) return null;
+    const n = xe[t];
+    return n ? q.createPortal(e.jsx("div", {
       className: "help-backdrop",
-      onClick: s,
+      onClick: a,
       children: e.jsxs("div", {
         className: "help-drawer",
-        onClick: (n) => n.stopPropagation(),
+        onClick: (s) => s.stopPropagation(),
         children: [
           e.jsxs("div", {
             className: "help-drawer-head",
             children: [
               e.jsx("span", {
                 className: "help-drawer-title",
-                children: t.title
+                children: n.title
               }),
               e.jsx("button", {
                 className: "help-drawer-close",
-                onClick: s,
+                onClick: a,
                 "aria-label": "Close help",
                 children: "\xD7"
               })
@@ -1141,11 +1202,11 @@ let __tla = Promise.all([
               }),
               e.jsx("p", {
                 className: "help-short",
-                children: t.short
+                children: n.short
               }),
               e.jsx("div", {
                 dangerouslySetInnerHTML: {
-                  __html: fe(t.body)
+                  __html: ge(n.body)
                 }
               })
             ]
@@ -1156,12 +1217,13 @@ let __tla = Promise.all([
   };
 });
 export {
-  Ze as H,
+  st as H,
   __tla,
-  Ye as a,
-  $e as b,
-  qe as c,
-  Ge as d,
-  Je as r,
-  Qe as s
+  tt as a,
+  Je as b,
+  Qe as c,
+  Ze as d,
+  et as e,
+  Ye as r,
+  nt as s
 };
