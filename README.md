@@ -1,72 +1,73 @@
 # DCC Published Assets
 
-This repository hosts published assets for Discrete Cortical Networks (DCC) research:
+Published assets for **Discrete Cortical Circuits (DCC)** — interactive web apps, encoder visualizers, and static infographics — served from GitHub Pages at `https://jacobeverist.github.io/dcc-public/`.
 
-- **Web-Based Apps** — interactive simulations and visualizations
-- **Visuals** — plots, animations, illustrations, and infographics
+## DCC Studio — Pooling Network Demo
 
-Everything is served as static files via GitHub Pages at `https://jacobeverist.github.io/dcc-public/`. Each top-level directory is a self-contained, independently hosted app (its own HTML, JavaScript, CSS, and — where applicable — a Rust-compiled WebAssembly engine). Versions are kept side-by-side (`_v1`, `_v2`, `_v3`) so existing embed links keep working; the latest of each is the recommended entry point.
+### ▶ [Launch the demo](https://jacobeverist.github.io/dcc-public/standalone_pooling_demo_v1/)
 
-## Published Apps
+<img src="assets/standalone_pooling_demo.png" width="1600" alt="DCC Studio pooling demo: a signal source, a grid encoder, and a pattern pooler, with the Learner Wiring inspector and the encoder Bins view">
 
-### DCC Simulations
+A fully interactive, configurable, inspectable demonstration of a classic HTM-like **pooling network**, running entirely in your browser. See the [announcement post](https://corticalcircuits.com/posts/dcc-studio-demo/) for the story behind it.
 
-Interactive simulations of DCC neural-network demos, powered by a Rust→WebAssembly engine with a React + React Flow visualization. Embeddable in websites, documentation, and forums.
+The core algorithms are Rust, compiled to WebAssembly. The algorithm is very efficient and runs at high speed in a browser's single-threaded environment.  It was designed to scale.
 
+### The network
 
-<img src="assets/dcc_studio_screenshot.png" width="1600" alt="dcc studio screenshot">
+Three **nodes**, wired in sequence:
 
+**`SignalSource1`** → **`PeriodicScalar1`** → **`PatternPooler1`**
 
-- [DCC Studio](https://jacobeverist.github.io/dcc-public/dcc_studio_v1) — latest DCC studio app
-- [DCC Dashboard (v2)](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2) — full dashboard to load and run many demos
-- [Encoder Comparison (v2 embed)](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2/embed.html?demo=encoderComparison) — single demo, embeddable
-- [Simple Scalar Encoder (v1 embed)](https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v1/embed.html?demo=simpleEncoder) — original basic encoder demo
+- **Data source** — a scalar signal. The shipped network runs a slow sine wave.
+- **Encoder** — the **Grid: Fixed-Weight** encoder, 64 bins with a weight of 12, turning each scalar value into a **sparse code** (an SDR).
+- **Pooler** — a **Pattern Pooler** with 64 cells, 8 of which activate on any given step.
 
-**Features:** WebAssembly-powered simulation, interactive controls (play, pause, step, speed, learning toggle), real-time visualization of network state / time-series / bit fields, and iframe embedding.
+Every node carries its own visualizations, so you can watch the data as it is produced, encoded into a sparse code, and then processed by the pooler cells — accumulating synaptic input, selecting winners, and learning by changing their **synaptic permanences**.
 
-### Encoder Visualizers
+Run it with the toolbar: **Run**, **Step**, **Reset**, and a speed slider. It starts running with learning on.
 
-Tools to configure scalar encoders and interactively inspect their encodings.
+### Inspecting
 
-<img src="assets/encoder_studio_screenshot.png" width="1600" alt="encoder studio screenshot">
+Two inspection views are attached to the network, and both are live while it runs:
 
-- [Encoder Studio](https://jacobeverist.github.io/dcc-public/encoder_studio_v1) — latest studio with a configurable, embeddable layout
-- [Encoder Analysis v3](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3) — adds an [embed builder](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3/embed-builder.html) and [playground](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3/playground.html)
-- [Encoder Analysis v2](https://jacobeverist.github.io/dcc-public/encoder_analysis_v2) — previous version
-- [Encoder Analysis v1](https://jacobeverist.github.io/dcc-public/encoder_analysis_v1) — original version
+- **Learner Wiring** (on the pooler) — the whole cell population across the top, the input bits across the bottom, and the dendrite of whichever cell you select fanned out between them, showing which synapses are *connected* and which are merely *potential*. Below it, that cell's synapse permanences are plotted against the permanence threshold. Click any cell to inspect it.
+- **Bins** (on the encoder) — the encoder read as a set of receptive fields across its input range, which is the most direct way to see what "grid-like" actually means here.
 
-### Infographics
+### Configuring
 
-<img src="assets/interval-random-3bin-example.svg" width="600" alt="interval diagram">
+Each of the three nodes has a configure button that opens an editor built for that node, with real-time visual feedback as you turn the knobs. This is the fastest way to build an intuition for how a parameter changes the behavior.
 
-- [Encoder Diagram Gallery](https://jacobeverist.github.io/dcc-public/encoder_infographics_v1) — static gallery of encoder diagrams (paired SVG + JSON spec per diagram)
+**Pattern Pooler** — the pooler algorithm here is the *DCCcore variant*, which is similar to the BrainBlocks Pattern Pooler. Each cell has a single dendrite with a fixed receptive field; the cells with the highest overlap win (k-winner-take-all), and only the winners learn. You can change:
+
+- **cells** — the size of the cell population, and so the width of the output
+- **weight** — how many cells activate per step
+- **permanence threshold** — the permanence at which a synapse counts as connected
+- **permanence increment** / **permanence decrement** — how fast a synapse strengthens or weakens during learning
+- **pooling %** — how much of the input a cell's dendrite is wired to
+- **connectivity %** — how many of those synapses start out already connected
+- **learning %** — what fraction of a winning cell's synapses update on a learning step
+
+**Grid: Fixed-Weight encoder** — a uniform arrangement of 1D grid cells whose receptive fields repeat, and which always emit the same number of active bits. It is worth understanding as a periodic encoder: firing fields that wrap, rather than one field per place. You can change **n** (the number of bins), the **weight** (active bits per code), the **modulus** (the period at which the grid cells repeat their activation to scalar input), and the **lower** and **upper bounds** of the encoded range — alongside several ways to visualize and characterize what the encoder is doing.
+
+**Data source** — fine-grained control over the scalar signal, working much like a soundtrack or video editor. You arrange **clips** (sine, square, sawtooth, each with its own amplitude, frequency, phase, and offset) along a **track**, and combine overlapping clips with a **transition** — forward precedence, backward precedence, blend, or jitter. Multiple tracks let you build independent waveforms that sum into one complex signal: a baseline track, plus anomaly tracks layered on top. Over that you can apply **data mutations** — noise, bias, scale, clamp, and dropout — and **time mutations** — a stall, where the signal freezes and then resumes. These are the artifacts real sensors produce: dropouts, update stalls, clamped ranges.
+
+### Status and feedback
+
+This is a beta. You are among the first people to use it, and feedback is genuinely wanted — if you hit an error, find something confusing, or want something to work differently, please [open a GitHub issue](https://github.com/jacobeverist/dcc-public/issues).
+
+Probably the first question is: *can I build my own circuits?* Yes, that capability exists. No, not in this version. It will be published when it is ready.
+
+In the meantime, this standalone demo should keep you busy. It can be quite fun to see the things you have only imagined while thinking about these algorithms.
+
+## Other published assets
+
+Earlier simulators, the encoder visualizers, the encoder diagram gallery, and instructions for embedding any of them in a page or forum are catalogued in **[APPS.md](APPS.md)**. Those apps remain published at their existing URLs.
 
 ## Technologies
 
+- **Rust + WebAssembly** — the DCC engine, compiled to run in the browser
 - **React** — UI framework
-- **React Flow** — graph visualization
-- **Rust + WebAssembly** — core DCC simulation engine, compiled to run in the browser
-- **Vite** — build tooling (apps here are pre-built artifacts)
+- **React Flow** — network graph visualization
+- **Vite** — build tooling
 
-## Embedding
-
-Embed any viewer with an iframe. Simulator demos are selected with a `?demo=` query parameter:
-
-```html
-<iframe
-    src="https://jacobeverist.github.io/dcc-public/embedded_dcc_viewer_v2/embed.html?demo=encoderComparison"
-    title="DCC Network Viewer"
-    allow="wasm-eval"
-    width="850"
-    height="600">
-</iframe>
-```
-
-`allow="wasm-eval"` is required for WebAssembly execution. Encoder Studio supports a configurable embed layout; the easiest way to generate embed code for the encoder tools is the [Encoder Analysis v3 embed builder](https://jacobeverist.github.io/dcc-public/encoder_analysis_v3/embed-builder.html).
-
-### Discourse Integration
-
-To embed in Discourse forums:
-1. Navigate to: Admin Settings → Site Settings → "allowed iframes"
-2. Add `https://jacobeverist.github.io/dcc-public/` to the allowed iframes list
-3. Paste the iframe code into your post
+Everything in this repository is a pre-built artifact; the source lives elsewhere.
