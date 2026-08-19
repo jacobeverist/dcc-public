@@ -1,0 +1,33 @@
+<!doctype html>
+<!--
+  Pooling Visualization — a standalone, single-network DCC app: a sinusoid encoded by grid
+  cells and pooled by a k-winner-take-all network. Its own build target (`pooling-visual` →
+  dist-pooling-visual/), NOT a URL into the shared embed: the network is compiled into the
+  bundle from src/pooling-visual-app/network.json, so there is no URL parameter that could
+  load a different one. Entry: src/pooling-visual-app/main.tsx.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- This app has NO demo manifest — it ships one network and no demo picker. The shared
+         toolbar still mounts the (hidden) picker, whose hook fetches this URL unconditionally;
+         an inline empty list answers it without a request, instead of 404ing on a
+         /demos/index.json that this target deliberately does not ship. -->
+    <meta name="dcc-demos" content="data:application/json,[]" />
+    <title>Pooling Visualization</title>
+    <style>
+      html, body, #root { margin: 0; height: 100%; }
+    </style>
+    <script type="module" crossorigin src="./assets/index-d6tzJi_p.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/elkjs-rLLxZdMu.js">
+    <link rel="modulepreload" crossorigin href="./assets/reactflow-7fxXwhal.js">
+    <link rel="modulepreload" crossorigin href="./assets/echarts-CxWuOr5q.js">
+    <link rel="stylesheet" crossorigin href="./assets/reactflow-BZV40eAE.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-OEPNl_uw.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
