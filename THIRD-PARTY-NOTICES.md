@@ -6,19 +6,19 @@ Nothing here changes the terms of the DCC apps themselves, which are in [TERMS.m
 
 **No third-party neural-network implementation is included.** The HTM, Sparse Predictive Hierarchies and Sparsey ports are not part of the product and are built into nothing published here, so they appear in no notice below.
 
-**Generated, not hand-written.** Two halves: the Rust crates compiled into the WebAssembly bundle (via `cargo about` in the source repository) and the npm packages bundled into the application JavaScript (via `npm ls --omit=dev`). Regenerated when the artifacts are rebuilt.
+**Generated, not hand-written** — by `tools/gen-public-notices.py` in the workspace repository, which reads the Rust crates from `dcc-core` and the npm packages from `dcc-dashboard`. Regenerate when the artifacts are rebuilt; `--check` fails if this file is stale.
 
 > **Scope note, stated because it is a real limitation.** The JavaScript half lists *declared production dependencies*, which is a **superset** of what Vite actually bundles after tree-shaking. Over-inclusion is deliberate: attributing a package that did not ship is harmless, while omitting one that did is not. Deriving the exact bundled set would mean reading Vite's rollup metadata, which is worth doing if this file is ever challenged.
 
 ## Components under copyleft licences
 
-**Two bundled components are not permissively licensed, and attribution alone does not discharge their terms.** Both are shipped unmodified, as obtained from npm.
+**Two bundled components are not permissively licensed, and attribution alone does not discharge their terms.** Both are shipped unmodified, as obtained from npm. The dashboard's licence gate (`npm run audit:licenses`) records them as reviewed exceptions and will fail if either changes licence.
 
 ### `elkjs` — Eclipse Public License 2.0
 
 Graph layout, bundled into the application JavaScript (`assets/elkjs-*.js`).
 
-EPL-2.0 requires that the source of the EPL-covered code be made available to recipients. It is published unmodified at **<https://github.com/kieler/elkjs>**, and the version in use is recorded in the component list below. No modifications have been made to it.
+EPL-2.0 requires that the source of the EPL-covered code be made available to recipients. It is published unmodified at **<https://github.com/kieler/elkjs>**. No modifications have been made to it.
 
 ### `libavoid-js` — GNU Lesser General Public License 2.1 or later
 
@@ -1166,7 +1166,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 </details>
 
-<details><summary><b>commander 7.2.0</b> — MIT</summary>
+<details><summary><b>commander 2.20.3</b> — MIT</summary>
 
 ```
 (The MIT License)
@@ -6051,7 +6051,7 @@ SOFTWARE.
 ### Packages shipping no licence file
 
 These declare a licence in `package.json` but bundle no licence text. Their
-terms are the declared SPDX licence; the canonical text is at <https://spdx.org/licenses/>.
+terms are the declared SPDX licence; canonical texts are at <https://spdx.org/licenses/>.
 
 - **@esbuild/darwin-arm64 0.25.12** — MIT
 - **@rollup/plugin-virtual 3.0.2** — MIT
