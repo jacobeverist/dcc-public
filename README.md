@@ -71,3 +71,9 @@ Earlier simulators, the encoder visualizers, the encoder diagram gallery, and in
 - **Vite** — build tooling
 
 Everything in this repository is a pre-built artifact; the source lives elsewhere.
+
+## Terms
+
+Free to use and embed for research, teaching, evaluation and personal projects. Commercial use needs a separate licence. Everything runs in your browser — there is no server — and anything you build with it is yours.
+
+The full terms are in **[TERMS.md](TERMS.md)**.

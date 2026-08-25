@@ -55,3 +55,9 @@ To embed in Discourse forums:
 1. Navigate to: Admin Settings → Site Settings → "allowed iframes"
 2. Add `https://jacobeverist.github.io/dcc-public/` to the allowed iframes list
 3. Paste the iframe code into your post
+
+---
+
+## Terms
+
+Embedding these apps is expressly permitted — that is what the `embed.html` entry points are for — for research, teaching, evaluation and personal projects. Commercial use needs a separate licence. See **[TERMS.md](TERMS.md)**.
