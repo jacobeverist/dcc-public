@@ -45,7 +45,9 @@ These pages are served from GitHub Pages as a convenience and may change, move, 
 
 ## Third-party components
 
-These apps bundle open-source components — React, React Flow, ECharts, KaTeX, elkjs and others — under their own licences, predominantly MIT and Apache-2.0. Their notices are in the source repository's `THIRD-PARTY-NOTICES.md` and accompany the distributed packages.
+These apps bundle open-source components — React, React Flow, ECharts, KaTeX, elkjs, libavoid and others — under their own licences. **Their notices, and the licence texts, are in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) in this repository.**
+
+Most are MIT or Apache-2.0. **Two are not**, and are called out at the top of that file with links to their unmodified upstream source: `elkjs` is Eclipse Public License 2.0, and `libavoid-js` is LGPL-2.1-or-later and ships as a separate, replaceable `.wasm` file.
 
 **The apps contain no third-party neural-network implementation.** The HTM, Sparse Predictive Hierarchies and Sparsey ports are not part of the product and are not built into anything published here.
 
